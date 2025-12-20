@@ -128,7 +128,7 @@ const config = {
               },
               {
                 label: 'Module 2: Digital Twin',
-                to: '/docs/modules/02-digital-twin-simulation/intro',
+                to: '/docs/modules/digital-twin-simulation/intro',
               },
             ],
           },

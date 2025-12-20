@@ -165,8 +165,8 @@ Virtual sensors connect to broader robotics systems:
 Virtual sensors are a critical component of digital twin simulation, providing the perception capabilities that connect physics and visual simulations to actual robot control systems. By accurately simulating various sensor types with realistic noise and limitations, we can develop and test perception algorithms that will transfer effectively to real robots.
 
 ### Cross-References
-- [Chapter 1: Physics-Based Simulation with Gazebo](./chapter-1-gazebo-simulation) - Foundation for physics simulation
-- [Chapter 2: High-Fidelity Environments with Unity](./chapter-2-unity-environments) - Visual simulation components
+- [Chapter 1: Physics-Based Simulation with Gazebo](../modules/digital-twin-simulation/chapter-1-gazebo-simulation) - Foundation for physics simulation
+- [Chapter 2: High-Fidelity Environments with Unity](../modules/digital-twin-simulation/chapter-2-unity-environments) - Visual simulation components
 
 ### Personalization Options
 This content can be adapted based on your background:

@@ -116,8 +116,8 @@ Unity environments should correspond to physics simulations from Gazebo:
 Unity provides the visual component of digital twin simulation that is essential for perception system development and human-robot interaction. By creating high-fidelity environments that match real-world conditions, we can train perception algorithms more effectively and test human-robot interaction scenarios safely.
 
 ### Cross-References
-- [Chapter 1: Physics-Based Simulation with Gazebo](./chapter-1-gazebo-simulation) - Foundation for physics simulation
-- [Chapter 3: Virtual Sensors for Embodied Perception](./chapter-3-virtual-sensors) - How sensors integrate with visual environments
+- [Chapter 1: Physics-Based Simulation with Gazebo](../modules/digital-twin-simulation/chapter-1-gazebo-simulation) - Foundation for physics simulation
+- [Chapter 3: Virtual Sensors for Embodied Perception](../modules/digital-twin-simulation/chapter-3-virtual-sensors) - How sensors integrate with visual environments
 
 ### Personalization Options
 This content can be adapted based on your background:

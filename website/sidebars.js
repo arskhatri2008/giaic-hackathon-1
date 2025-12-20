@@ -30,10 +30,10 @@ const sidebars = {
       type: 'category',
       label: 'Module 2: The Digital Twin (Gazebo & Unity)',
       items: [
-        'modules/02-digital-twin-simulation/intro',
-        'modules/02-digital-twin-simulation/chapter-1-gazebo-simulation',
-        'modules/02-digital-twin-simulation/chapter-2-unity-environments',
-        'modules/02-digital-twin-simulation/chapter-3-virtual-sensors'
+        'modules/digital-twin-simulation/intro',
+        'modules/digital-twin-simulation/chapter-1-gazebo-simulation',
+        'modules/digital-twin-simulation/chapter-2-unity-environments',
+        'modules/digital-twin-simulation/chapter-3-virtual-sensors'
       ],
     },
   ],
