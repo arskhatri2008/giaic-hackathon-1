@@ -26,6 +26,16 @@ const sidebars = {
         'module-1/chapter-3-urdf-humanoid-robot-structure'
       ],
     },
+    {
+      type: 'category',
+      label: 'Module 2: The Digital Twin (Gazebo & Unity)',
+      items: [
+        'modules/02-digital-twin-simulation/intro',
+        'modules/02-digital-twin-simulation/chapter-1-gazebo-simulation',
+        'modules/02-digital-twin-simulation/chapter-2-unity-environments',
+        'modules/02-digital-twin-simulation/chapter-3-virtual-sensors'
+      ],
+    },
   ],
 };
 
