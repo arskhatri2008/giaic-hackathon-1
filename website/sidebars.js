@@ -36,6 +36,15 @@ const sidebars = {
         'modules/digital-twin-simulation/chapter-3-virtual-sensors'
       ],
     },
+    {
+      type: 'category',
+      label: 'Module 3: The AI-Robot Brain (NVIDIA Isaac™)',
+      items: [
+        'modules/ai-robot-brain/chapter-1-isaac-sim',
+        'modules/ai-robot-brain/chapter-2-isaac-ros-perception',
+        'modules/ai-robot-brain/chapter-3-nav2-navigation'
+      ],
+    },
   ],
 };
 
