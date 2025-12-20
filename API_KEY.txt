@@ -1,0 +1,1 @@
+echo 'export GOOGLE_API_KEY="AIzaSyAT8UapWKLtXjV1EpPw8XviqaYNTTHJ8Kc"' >> ~/.bashrc

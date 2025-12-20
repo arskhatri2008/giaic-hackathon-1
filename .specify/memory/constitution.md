@@ -1,55 +1,115 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!-- SYNC IMPACT REPORT
+Version change: N/A -> 1.0.0
+Modified principles: N/A (new constitution)
+Added sections: All sections (new constitution)
+Removed sections: N/A
+Templates requiring updates:
+  - .specify/templates/plan-template.md ✅ updated
+  - .specify/templates/spec-template.md ✅ updated
+  - .specify/templates/tasks-template.md ✅ updated
+  - .specify/templates/commands/*.md ⚠ pending
+  - README.md ⚠ pending
+Follow-up TODOs: None
+-->
+
+# AI-Spec-Driven Interactive Book with Embedded RAG Chatbot Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Spec-Driven Development
+All content, features, APIs, and workflows must be defined and evolved through clear, versioned specifications before implementation. This ensures that all development follows a predetermined plan and maintains consistency across the project.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Accuracy & Groundedness
+All technical explanations must be correct, reproducible, and aligned with current best practices in AI engineering, RAG systems, and modern web development. This principle ensures that the content remains factually accurate and technically sound.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### Modular & Reusable Intelligence
+Use Claude Code Subagents and Agent Skills to create reusable, composable intelligence for writing, reviewing, summarizing, personalizing, translating, and chatbot reasoning. This promotes efficiency and consistency across different aspects of the project.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Personalization-by-Design
+Content must adapt to the user's declared software and hardware background collected at signup. This ensures that the educational material is tailored to each user's specific background and needs.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### User-Centric Clarity
+Content must remain understandable, structured, and progressive for readers with varying technical backgrounds. This ensures accessibility and comprehension for all users regardless of their starting skill level.
 
-### [PRINCIPLE_6_NAME]
+## Key Standards and Constraints
 
+### Content & Book Authoring Standards
+- Written using Docusaurus (MDX format)
+- Structured as chapters, sections, and sub-sections
+- Generated and maintained via Spec-Kit Plus workflows
+- Deployed to GitHub Pages
+- Each chapter must support:
+  - Default (non-personalized) view
+  - Personalized view (based on user profile)
+  - Urdu translation view
 
-[PRINCIPLE__DESCRIPTION]
+### RAG Chatbot Standards
+- Embedded directly into the published book UI
+- Built using:
+  - OpenAI Agents / ChatKit SDKs
+  - FastAPI backend
+  - Neon Serverless Postgres (metadata, users, auth links)
+  - Qdrant Cloud Free Tier (vector storage)
+- Capabilities:
+  - Answer questions about the entire book
+  - Answer questions based ONLY on user-selected text
+  - Respect user authentication and personalization context
+  - No hallucinated answers outside indexed content
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### Authentication & User Profiling Standards
+- Signup & Signin implemented using https://www.better-auth.com/
+- At signup, explicitly collect:
+  - Programming experience level
+  - Preferred languages & frameworks
+  - AI/ML background
+  - Hardware capability (local vs cloud, GPU availability)
+- User profile must drive:
+  - Content depth
+  - Examples complexity
+  - Terminology selection
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### Personalization & Translation Standards
+- Each chapter must include:
+  - A "Personalize Content" button
+  - A "Translate to Urdu" button
+- Personalization must:
+  - Preserve factual correctness
+  - Adapt tone, depth, and examples
+- Translation must:
+  - Maintain technical accuracy
+  - Preserve code blocks and identifiers
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Reusable Intelligence Standards
+- Claude Code Subagents must be created for:
+  - Chapter authoring
+  - Technical review
+  - Fact validation
+  - Content personalization
+  - Urdu translation
+  - RAG prompt construction
+- Agent Skills must be reusable across chapters and features
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+## Constraints
+
+- No hardcoded content outside specs
+- All AI-generated content must be reviewable and regenerable
+- No chatbot responses without verified retrieval context
+- No personalization without authenticated user context
+- No translation that alters technical meaning
+- All services must use free or serverless tiers where specified
+
+## Success Criteria
+
+- Book is fully published on GitHub Pages
+- All chapters authored via Spec-Kit Plus + Claude Code
+- RAG chatbot correctly answers:
+  - Global book questions
+  - Selected-text-only questions
+- Authentication and personalization work end-to-end
+- Urdu translation available for all content
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution governs all development activities for the AI-Spec-Driven Interactive Book project. All team members must adhere to these principles and standards. Any deviation from these principles must be documented and justified. Changes to this constitution require explicit approval and must follow the established amendment procedures.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-12-20 | **Last Amended**: 2025-12-20
