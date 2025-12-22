@@ -231,8 +231,8 @@ Building on Module 1, Gazebo simulation integrates with ROS 2 concepts:
 Physics-based simulation with Gazebo provides the foundation for safe and repeatable testing of humanoid robots. By accurately modeling physical forces like gravity, collisions, and friction, we can develop and test robotic behaviors before real-world deployment. This approach is essential for the safety and reliability of humanoid robotics systems.
 
 ### Cross-References
-- [Chapter 2: High-Fidelity Environments with Unity](../modules/digital-twin-simulation/chapter-2-unity-environments) - Learn how visual environments complement physics simulation
-- [Chapter 3: Virtual Sensors for Embodied Perception](../modules/digital-twin-simulation/chapter-3-virtual-sensors) - Understand how sensors integrate with physics simulation
+- [Chapter 2: High-Fidelity Environments with Unity](./chapter-2-unity-environments) - Learn how visual environments complement physics simulation
+- [Chapter 3: Virtual Sensors for Embodied Perception](./chapter-3-virtual-sensors) - Understand how sensors integrate with physics simulation
 
 ### Personalization Options
 This content can be adapted based on your background:

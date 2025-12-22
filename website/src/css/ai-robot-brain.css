@@ -1,0 +1,65 @@
+/* Styles for AI-Robot Brain module */
+
+/* Isaac-specific color scheme */
+.isaac-content {
+  --ifm-color-primary: #1a73e8;
+  --ifm-color-primary-dark: #0d62c9;
+  --ifm-color-primary-darker: #0b57b6;
+  --ifm-color-primary-darkest: #094796;
+  --ifm-color-primary-light: #3d8bee;
+  --ifm-color-primary-lighter: #4d96ef;
+  --ifm-color-primary-lightest: #6da7f2;
+}
+
+/* Isaac concept cards */
+.isaac-concept-card {
+  border: 1px solid var(--ifm-color-primary-lighter);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  background-color: #f8f9ff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.isaac-concept-card h3 {
+  color: var(--ifm-color-primary);
+  border-bottom: 1px solid var(--ifm-color-primary-lighter);
+  padding-bottom: 0.5rem;
+  margin-top: 0;
+}
+
+/* Isaac diagram containers */
+.isaac-diagram-container {
+  text-align: center;
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+}
+
+/* Isaac code blocks */
+.isaac-code-block {
+  border-left: 4px solid var(--ifm-color-primary);
+}
+
+/* Isaac navigation links */
+.isaac-nav-link {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.isaac-nav-link:hover {
+  text-decoration: underline;
+}
+
+/* Isaac learning objectives list */
+.isaac-learning-objectives {
+  background-color: #e8f0fe;
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 4px solid var(--ifm-color-primary);
+}
+
+.isaac-learning-objectives ul {
+  margin-bottom: 0;
+}
