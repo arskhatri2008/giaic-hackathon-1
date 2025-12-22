@@ -20,6 +20,12 @@ const config = {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
 
+  // Updated deprecated option (will show warning but works)
+  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    mermaid: true,
+  },
+
   // Set the production url of your site here
   url: "https://giaic-hackathon-1-ten.vercel.app/",
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -49,10 +55,9 @@ const config = {
       ({
         docs: {
           sidebarPath: "./sidebars.js",
-          // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+            "https://github.com/arskhatri2008/giaic-hackathon-1/tree/main/website/",
         },
         blog: {
           showReadingTime: true,
@@ -60,10 +65,9 @@ const config = {
             type: ["rss", "atom"],
             xslt: true,
           },
-          // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
+            "https://github.com/arskhatri2008/giaic-hackathon-1/tree/main/website/",
           // Useful options to enforce blogging best practices
           onInlineTags: "warn",
           onInlineAuthors: "warn",
