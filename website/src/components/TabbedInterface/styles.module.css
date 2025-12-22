@@ -1,0 +1,102 @@
+/* Styles for TabbedInterface component */
+
+.tabbedInterface {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  overflow: hidden;
+  margin: var(--ifm-global-spacing) 0;
+}
+
+.tabsContainer {
+  background-color: var(--ifm-color-emphasis-100);
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.tabsList {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tabItem {
+  margin: 0;
+}
+
+.tabButton {
+  padding: var(--ifm-global-spacing-half) var(--ifm-global-spacing);
+  border: none;
+  background-color: transparent;
+  color: var(--ifm-color-emphasis-700);
+  cursor: pointer;
+  font-weight: var(--ifm-font-weight-semibold);
+  transition: all 0.15s ease;
+  border-bottom: 2px solid transparent;
+  position: relative;
+}
+
+.tabButton:hover {
+  background-color: var(--ifm-color-emphasis-200);
+  color: var(--ifm-color-emphasis-800);
+}
+
+.tabButton.active {
+  background-color: var(--ifm-color-white);
+  color: var(--ifm-color-primary);
+  border-bottom: 2px solid var(--ifm-color-primary);
+}
+
+.tabButton:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: -2px;
+}
+
+.tabPanelsContainer {
+  padding: var(--ifm-global-spacing);
+  background-color: var(--ifm-color-white);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .tabsList {
+    flex-direction: column;
+  }
+
+  .tabButton {
+    border: 1px solid var(--ifm-color-emphasis-300);
+    border-bottom: none;
+  }
+
+  .tabButton:first-of-type {
+    border-top-left-radius: var(--ifm-global-radius);
+    border-top-right-radius: var(--ifm-global-radius);
+  }
+
+  .tabButton:last-of-type {
+    border-bottom: 1px solid var(--ifm-color-emphasis-300);
+    border-bottom-left-radius: var(--ifm-global-radius);
+    border-bottom-right-radius: var(--ifm-global-radius);
+  }
+
+  .tabButton.active {
+    border-bottom: 1px solid var(--ifm-color-primary);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .tabbedInterface {
+    border: 2px solid CanvasText;
+  }
+
+  .tabButton.active {
+    border-bottom: 3px solid CanvasText;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .tabButton {
+    transition: none;
+  }
+}

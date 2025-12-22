@@ -12,6 +12,27 @@ Module 1: The Robotic Nervous System (ROS 2) introduces:
 
 This module is designed for AI engineers and software developers transitioning into robotics, with Python and basic AI background.
 
+## Interactive UI Features
+
+This website includes a comprehensive suite of interactive UI components designed to enhance the learning experience:
+
+### Navigation Components
+- **Interactive Sidebar**: Collapsible navigation with keyboard accessibility support
+- **Responsive Navbar**: Adapts to different screen sizes with mobile menu toggle
+- **Breadcrumb Navigation**: Shows current location in the documentation hierarchy
+
+### Content Components
+- **Expandable Sections**: Collapsible content sections with smooth animations
+- **Interactive Code Blocks**: Syntax-highlighted code with copy functionality
+- **Knowledge Checks**: Interactive quizzes for validating understanding
+- **Tabbed Interfaces**: Multi-language code examples in organized tabs
+
+### Accessibility & Performance
+- **WCAG 2.1 AA Compliance**: Full accessibility support with keyboard navigation
+- **Responsive Design**: Works on mobile, tablet, and desktop devices
+- **Performance Optimized**: React.memo and lazy loading for fast rendering
+- **Theme Support**: Light/dark mode switching capability
+
 ## Learning Objectives
 
 After completing this module, learners will be able to:

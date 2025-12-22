@@ -1,0 +1,139 @@
+/* Styles for Breadcrumb component */
+
+.breadcrumbNav {
+  padding: var(--ifm-global-spacing-half) 0;
+  margin-bottom: var(--ifm-global-spacing);
+  font-size: var(--ifm-font-size-base);
+}
+
+.breadcrumbList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: var(--ifm-breadcrumb-color);
+}
+
+.breadcrumbItem {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumbItem a,
+.breadcrumbItem span {
+  text-decoration: none;
+  color: inherit;
+}
+
+.breadcrumbLink {
+  padding: var(--ifm-global-spacing-quarter) var(--ifm-global-spacing-half);
+  border-radius: var(--ifm-global-radius);
+  transition: all 0.15s ease;
+}
+
+.breadcrumbLinkInactive {
+  color: var(--ifm-breadcrumb-inactive-color);
+}
+
+.breadcrumbLinkInactive:hover {
+  color: var(--ifm-breadcrumb-hover-color);
+  text-decoration: underline;
+  background-color: var(--ifm-menu-color-background-hover);
+}
+
+.breadcrumbLinkActive {
+  color: var(--ifm-breadcrumb-active-color);
+  font-weight: var(--ifm-font-weight-bold);
+}
+
+.breadcrumbSeparator {
+  margin: 0 var(--ifm-global-spacing-quarter);
+  color: var(--ifm-breadcrumb-separator-color);
+  user-select: none;
+}
+
+.breadcrumbItemHome .breadcrumbLink {
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .breadcrumbList {
+    flex-wrap: wrap;
+  }
+
+  .breadcrumbLink {
+    padding: var(--ifm-global-spacing-quarter);
+    font-size: 0.875rem;
+  }
+
+  .breadcrumbSeparator {
+    margin: 0 var(--ifm-global-spacing-quarter);
+  }
+}
+
+/* Focus styles for accessibility */
+.breadcrumbLink:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.breadcrumbLink:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.breadcrumbLink:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .breadcrumbLink {
+    border-bottom: 1px solid transparent;
+  }
+
+  .breadcrumbLink:hover,
+  .breadcrumbLink:focus {
+    border-bottom: 1px solid;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .breadcrumbLink {
+    transition: none;
+  }
+}
+
+/* Truncate long breadcrumb items */
+.breadcrumbLink {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 769px) {
+  .breadcrumbLink {
+    max-width: 300px;
+  }
+}
+
+/* Screen reader only content for better accessibility */
+.breadcrumbSROnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

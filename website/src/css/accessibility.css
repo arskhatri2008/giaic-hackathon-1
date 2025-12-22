@@ -1,0 +1,266 @@
+/* Accessibility utilities for keyboard navigation and screen readers */
+
+/* Focus management and keyboard navigation */
+.focusable {
+  outline: none;
+}
+
+.focusable:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ifm-color-primary), transparent 70%);
+}
+
+.focusable:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ifm-color-primary), transparent 70%);
+}
+
+.focusable:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+/* High contrast mode support */
+.high-contrast-enabled {
+  /* Increase contrast for better visibility */
+}
+
+.high-contrast-enabled .interactive-element {
+  border: 2px solid #000;
+}
+
+.high-contrast-enabled .collapsible-header {
+  border-bottom: 2px solid #000;
+}
+
+.high-contrast-enabled .knowledge-check-option {
+  border: 2px solid #000;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .interactive-element,
+  .collapsible-section,
+  .knowledge-check-option,
+  .fade-in,
+  .slide-down {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Screen reader utilities */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only-focusable {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Skip link for screen readers */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Contrast enhancements */
+.high-contrast-text {
+  color: #000;
+}
+
+.high-contrast-bg {
+  background-color: #fff;
+}
+
+.high-contrast-border {
+  border: 2px solid #000;
+}
+
+/* Focus indicators for different interactive elements */
+.button-focus:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.link-focus:focus {
+  outline: 2px dashed var(--ifm-color-primary);
+  outline-offset: 1px;
+  text-decoration: underline;
+}
+
+.input-focus:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ifm-color-primary), transparent 70%);
+}
+
+/* Semantic heading order preservation */
+.heading-order-h1 { font-size: 2rem; }
+.heading-order-h2 { font-size: 1.5rem; }
+.heading-order-h3 { font-size: 1.25rem; }
+.heading-order-h4 { font-size: 1rem; }
+
+/* WCAG 2.1 AA compliant color contrast */
+.wcag-aa-text {
+  color: #000;
+}
+
+.wcag-aa-text-light {
+  color: #fff;
+}
+
+.wcag-aa-bg-primary {
+  background-color: var(--ifm-color-primary);
+  color: #fff;
+}
+
+.wcag-aa-bg-secondary {
+  background-color: var(--ifm-color-emphasis-200);
+  color: #000;
+}
+
+/* Alternative text treatments for low vision */
+.enhanced-text {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.enhanced-spacing {
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+}
+
+/* Landmark regions for screen readers */
+.main-content {
+  display: block;
+}
+
+.nav-region {
+  display: block;
+}
+
+.search-region {
+  display: block;
+}
+
+.footer-region {
+  display: block;
+}
+
+.sidebar-region {
+  display: block;
+}
+
+/* ARIA attribute styles */
+[aria-expanded="true"] .collapse-icon::before {
+  content: "▲";
+}
+
+[aria-expanded="false"] .collapse-icon::before {
+  content: "▼";
+}
+
+[aria-current="page"],
+[aria-current="step"],
+[aria-current="location"],
+[aria-current="date"],
+[aria-current="time"] {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Focus management for modals and overlays */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.dialog-content {
+  position: relative;
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Trap focus inside modal for accessibility */
+.dialog-content:focus {
+  outline: none;
+}
+
+/* Animation for loading states (considerate of motion sensitivity) */
+.loading-indicator {
+  animation: loadingPulse 1.5s infinite ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-indicator {
+    animation: loadingPulseReduced 1s infinite step-end;
+  }
+}
+
+@keyframes loadingPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes loadingPulseReduced {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Visual indicator for keyboard navigation vs mouse */
+.keyboard-nav .focusable:focus {
+  animation: keyboardFocus 0.2s ease-in-out;
+}
+
+@keyframes keyboardFocus {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}

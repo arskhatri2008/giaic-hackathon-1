@@ -1,0 +1,160 @@
+/* Styles for InteractiveCodeBlock component */
+
+.interactiveCodeBlock {
+  margin: var(--ifm-global-spacing) 0;
+  border-radius: var(--ifm-global-radius);
+  overflow: hidden;
+  background-color: var(--ifm-code-background);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  position: relative;
+}
+
+.interactiveCodeBlock.withTitle {
+  margin-top: calc(var(--ifm-global-spacing) * 1.5);
+}
+
+.codeTitle {
+  padding: var(--ifm-global-spacing-half) var(--ifm-global-spacing);
+  margin: 0;
+  font-size: 0.85em;
+  font-weight: var(--ifm-font-weight-semibold);
+  background-color: var(--ifm-color-emphasis-100);
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.codeContainer {
+  position: relative;
+  display: flex;
+}
+
+.lineNumbers {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  padding: var(--ifm-pre-padding) 0;
+  background-color: color-mix(in srgb, var(--ifm-code-background) 80%, transparent 20%);
+  color: var(--ifm-color-emphasis-500);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: var(--ifm-code-font-size);
+  line-height: var(--ifm-pre-line-height);
+  text-align: right;
+  overflow: hidden;
+  z-index: 1;
+  user-select: none;
+}
+
+.lineNumber {
+  padding: 0 var(--ifm-pre-padding) 0 var(--ifm-pre-padding);
+  line-height: var(--ifm-pre-line-height);
+}
+
+.codePre {
+  flex: 1;
+  margin: 0;
+  padding: var(--ifm-pre-padding);
+  padding-left: var(--ifm-pre-padding);
+  overflow-x: auto;
+  background-color: transparent;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: var(--ifm-code-font-size);
+  line-height: var(--ifm-pre-line-height);
+  border-radius: 0;
+}
+
+.codePre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.codeBlock {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.copyButton {
+  position: absolute;
+  top: var(--ifm-global-spacing-half);
+  right: var(--ifm-global-spacing-half);
+  padding: var(--ifm-global-spacing-quarter) var(--ifm-global-spacing-half);
+  background-color: var(--ifm-color-emphasis-200);
+  border: 1px solid var(--ifm-color-emphasis-400);
+  border-radius: var(--ifm-global-radius);
+  color: var(--ifm-color-emphasis-800);
+  font-size: 0.85em;
+  font-weight: var(--ifm-font-weight-semibold);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 2;
+}
+
+.copyButton:hover {
+  background-color: var(--ifm-color-emphasis-300);
+  transform: translateY(-1px);
+}
+
+.copyButton:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.copyButton:active {
+  transform: translateY(0);
+}
+
+/* Responsive styles */
+@media (max-width: 996px) {
+  .interactiveCodeBlock {
+    margin: var(--ifm-global-spacing-half) 0;
+  }
+
+  .codePre {
+    padding: var(--ifm-pre-padding-half);
+    padding-left: calc(var(--ifm-pre-padding) + 2.5rem); /* Account for line numbers */
+  }
+
+  .lineNumbers {
+    padding: var(--ifm-pre-padding-half) 0;
+  }
+
+  .lineNumber {
+    padding: 0 var(--ifm-pre-padding-half) 0 var(--ifm-pre-padding-half);
+  }
+
+  .copyButton {
+    padding: var(--ifm-global-spacing-quarter) var(--ifm-global-spacing-quarter);
+    font-size: 0.75em;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .interactiveCodeBlock {
+    border: 2px solid CanvasText;
+  }
+
+  .codePre {
+    border-left: 2px solid CanvasText;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .copyButton {
+    transition: none;
+  }
+
+  .copyButton:hover {
+    transform: none;
+  }
+
+  .copyButton:active {
+    transform: none;
+  }
+}

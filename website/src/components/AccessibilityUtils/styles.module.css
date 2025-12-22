@@ -1,0 +1,267 @@
+/* Styles for AccessibilityUtils component */
+
+/* Hide visually but keep accessible to screen readers */
+.screenReaderOnly {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* ARIA live region styles */
+.ariaLiveRegion {
+  position: relative;
+}
+
+.ariaLiveRegion.polite {
+  /* No special styling needed - polite announcements are non-urgent */
+}
+
+.ariaLiveRegion.assertive {
+  /* Assertive announcements may need more visual attention */
+  border-left: 3px solid var(--ifm-color-danger);
+  padding-left: var(--ifm-spacing-half);
+}
+
+/* Skip link for keyboard navigation */
+.skipLink {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--ifm-color-primary);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 0 0 4px 4px;
+  z-index: 1000;
+  transition: top 0.3s ease;
+}
+
+.skipLink:focus {
+  top: 0;
+  outline: 2px solid white;
+  outline-offset: -2px;
+}
+
+.skipLink:hover {
+  background: var(--ifm-color-primary-dark);
+}
+
+/* Focus indicator wrapper */
+.focusIndicatorWrapper {
+  position: relative;
+}
+
+.focusIndicatorWrapper:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.focusIndicatorWrapper:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Accessibility container */
+.accessibilityContainer {
+  position: relative;
+  width: 100%;
+}
+
+/* Content area within accessibility container */
+.contentArea {
+  position: relative;
+  width: 100%;
+}
+
+/* Focus management utilities */
+.focusVisible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.focusVisible:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.focusVisible:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .screenReaderOnly {
+    /* In high contrast mode, these elements might become visible */
+    /* So we ensure they remain properly hidden */
+    background: transparent !important;
+    color: transparent !important;
+    border: 0 !important;
+  }
+
+  .skipLink {
+    border: 2px solid CanvasText;
+    background: CanvasText;
+    color: Canvas;
+  }
+
+  .focusVisible:focus,
+  .focusIndicatorWrapper:focus {
+    outline: 2px solid CanvasText;
+    outline-offset: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .skipLink {
+    transition: none;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .skipLink {
+    left: 4px;
+    padding: 6px;
+    font-size: 0.875rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .skipLink {
+    display: none;
+  }
+
+  .screenReaderOnly {
+    display: none;
+  }
+}
+
+/* Visually hidden but accessible */
+.visuallyHidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Focus trap styles */
+.focusTrap {
+  position: relative;
+}
+
+.focusTrap:focus {
+  outline: none;
+}
+
+.focusTrap:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Screen reader announcement styles */
+.screenReaderAnnouncement {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Accessible toggle switch */
+.accessibleToggle {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.accessibleToggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.accessibleToggleSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.accessibleToggleSlider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.accessibleToggle input:checked + .accessibleToggleSlider {
+  background-color: var(--ifm-color-primary);
+}
+
+.accessibleToggle input:checked + .accessibleToggleSlider:before {
+  transform: translateX(26px);
+}
+
+.accessibleToggle input:focus + .accessibleToggleSlider {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ifm-color-primary), transparent 70%);
+}
+
+/* Accessible modal overlay */
+.accessibleModalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accessibleModalContent {
+  background-color: var(--ifm-background-color);
+  border: 2px solid var(--ifm-color-primary);
+  border-radius: var(--ifm-global-radius);
+  padding: var(--ifm-spacing);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  outline: none;
+}
+
+.accessibleModalContent:focus {
+  outline: none;
+}

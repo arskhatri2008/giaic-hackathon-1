@@ -1,0 +1,191 @@
+/* Responsive Grid System for Docusaurus Interactive UI */
+
+/* CSS Grid and Flexbox Layout System */
+.interactive-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "sidebar"
+    "main"
+    "footer";
+  min-height: 100vh;
+  gap: var(--ifm-spacing-horizontal);
+}
+
+/* Responsive sidebar layout */
+.interactive-sidebar-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--ifm-spacing-vertical);
+}
+
+/* Main content area with responsive behavior */
+.interactive-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ifm-spacing-vertical);
+}
+
+/* Responsive grid for interactive components */
+.interactive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: var(--ifm-spacing-horizontal);
+}
+
+.interactive-grid.two-column {
+  grid-template-columns: repeat(auto-fit, minmax(min(500px, 100%), 1fr));
+}
+
+.interactive-grid.three-column {
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+}
+
+.interactive-grid.four-column {
+  grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+}
+
+/* Flexbox utilities for responsive layouts */
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ifm-spacing-horizontal);
+}
+
+.flex-item {
+  flex: 1 1 auto;
+  min-width: 250px;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+/* Responsive adjustments for different screen sizes */
+@media (min-width: 768px) {
+  .interactive-layout {
+    grid-template-columns: 250px 1fr;
+    grid-template-areas:
+      "header header"
+      "sidebar main"
+      "footer footer";
+  }
+
+  .interactive-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
+  }
+
+  .interactive-grid.two-column {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .flex-row-responsive {
+    flex-direction: row;
+  }
+
+  .flex-column-responsive {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 1024px) {
+  .interactive-layout {
+    grid-template-columns: 300px 1fr;
+  }
+
+  .interactive-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
+  }
+
+  .interactive-grid.three-column {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .interactive-grid.four-column {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .flex-responsive {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (min-width: 1200px) {
+  .interactive-layout {
+    grid-template-columns: 350px 1fr;
+  }
+
+  .interactive-grid {
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  }
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 767px) {
+  .interactive-layout {
+    padding: 0 var(--ifm-spacing-half);
+  }
+
+  .interactive-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .interactive-grid.two-column,
+  .interactive-grid.three-column,
+  .interactive-grid.four-column {
+    grid-template-columns: 1fr;
+  }
+
+  .flex-container {
+    flex-direction: column;
+  }
+
+  .flex-responsive {
+    flex-direction: column;
+  }
+}
+
+/* Tablet-specific adjustments */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .interactive-grid.three-column,
+  .interactive-grid.four-column {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Accessibility adjustments for responsive layouts */
+@media (prefers-reduced-motion: reduce) {
+  .interactive-layout,
+  .interactive-grid,
+  .flex-container {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .interactive-layout {
+    border: 1px solid CanvasText;
+  }
+
+  .interactive-grid {
+    border: 1px solid CanvasText;
+  }
+}
