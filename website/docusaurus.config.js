@@ -11,7 +11,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'Physical AI & Humanoid Robotics',
-  tagline: 'Module 1: The Robotic Nervous System (ROS 2) - Learn ROS 2 fundamentals, communication primitives, and robot modeling with URDF',
+  tagline: 'Module 1: The Robotic Nervous System (ROS 2) & Module 2: The Digital Twin (Gazebo & Unity) - Learn ROS 2 fundamentals, physics simulation, and perception systems for humanoid robots',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -106,7 +106,7 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Module 1: ROS 2',
+            label: 'Modules: ROS 2 & Digital Twin',
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
@@ -125,6 +125,10 @@ const config = {
               {
                 label: 'Module 1: ROS 2',
                 to: '/docs/module-1/intro',
+              },
+              {
+                label: 'Module 2: Digital Twin',
+                to: '/docs/modules/digital-twin-simulation/intro',
               },
             ],
           },
