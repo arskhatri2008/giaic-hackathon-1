@@ -1,0 +1,146 @@
+/* Styles for HighContrastMode component */
+
+/* High contrast mode styles */
+.highContrastMode {
+  /* Increase contrast for all text elements */
+  color: CanvasText !important;
+  background-color: Canvas !important;
+}
+
+.highContrastMode * {
+  /* Ensure all elements have high contrast */
+  background-color: inherit !important;
+  color: inherit !important;
+  border-color: CanvasText !important;
+}
+
+.highContrastMode a {
+  color: LinkText !important;
+  text-decoration: underline !important;
+}
+
+.highContrastMode a:visited {
+  color: GrayText !important;
+}
+
+.highContrastMode button,
+.highContrastMode input[type="button"],
+.highContrastMode input[type="submit"],
+.highContrastMode input[type="reset"] {
+  border: 2px solid CanvasText !important;
+  background-color: ButtonFace !important;
+  color: ButtonText !important;
+}
+
+.highContrastMode button:focus,
+.highContrastMode input[type="button"]:focus,
+.highContrastMode input[type="submit"]:focus,
+.highContrastMode input[type="reset"]:focus {
+  outline: 2px solid Highlight !important;
+  outline-offset: 2px;
+}
+
+.highContrastMode input[type="text"],
+.highContrastMode input[type="password"],
+.highContrastMode input[type="email"],
+.highContrastMode input[type="tel"],
+.highContrastMode input[type="url"],
+.highContrastMode textarea,
+.highContrastMode select {
+  border: 2px solid CanvasText !important;
+  background-color: Field !important;
+  color: FieldText !important;
+}
+
+.highContrastMode hr {
+  border: 1px solid CanvasText !important;
+  color: CanvasText !important;
+}
+
+.highContrastMode img,
+.highContrastMode svg {
+  filter: grayscale(100%) contrast(150%) !important;
+}
+
+.highContrastMode .interactive-element {
+  border: 2px solid CanvasText !important;
+  outline: 1px solid CanvasText !important;
+}
+
+.highContrastMode .focusable:focus {
+  outline: 2px solid Highlight !important;
+  outline-offset: 2px;
+}
+
+/* Override default styles in high contrast mode */
+.highContrastMode .interactive-sidebar,
+.highContrastMode .responsive-navbar,
+.highContrastMode .expandable-section,
+.highContrastMode .interactive-code-block,
+.highContrastMode .knowledge-check {
+  border: 1px solid CanvasText !important;
+  background-color: Canvas !important;
+  color: CanvasText !important;
+}
+
+.highContrastMode .sidebar-link,
+.highContrastMode .nav-link,
+.highContrastMode .expandable-header {
+  border: 1px solid CanvasText !important;
+  background-color: Canvas !important;
+  color: CanvasText !important;
+}
+
+.highContrastMode .expandable-content {
+  border-left: 2px solid CanvasText !important;
+}
+
+.highContrastMode .code-block-wrapper {
+  border: 1px solid CanvasText !important;
+}
+
+.highContrastMode .copy-button {
+  border: 1px solid CanvasText !important;
+}
+
+.highContrastMode .knowledge-check-option {
+  border: 1px solid CanvasText !important;
+}
+
+/* Focus indicators */
+.highContrastMode .focus-indicator {
+  outline: 2px solid Highlight !important;
+  outline-offset: 2px;
+}
+
+/* Special high contrast classes for specific components */
+.hc-bold {
+  font-weight: bold !important;
+}
+
+.hc-underline {
+  text-decoration: underline !important;
+}
+
+.hc-border {
+  border: 2px solid CanvasText !important;
+}
+
+.hc-invert {
+  filter: invert(100%) !important;
+}
+
+/* Responsive adjustments for high contrast */
+@media (max-width: 768px) {
+  .highContrastMode .interactive-element {
+    border-width: 1px !important;
+  }
+}
+
+/* Print styles for high contrast */
+@media print {
+  .highContrastMode {
+    color: black !important;
+    background-color: white !important;
+  }
+}

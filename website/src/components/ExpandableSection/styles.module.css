@@ -1,0 +1,112 @@
+/* Styles for ExpandableSection component */
+
+.expandableSection {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  margin-bottom: var(--ifm-global-spacing);
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.expandableSection:hover {
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+.expandableHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--ifm-global-spacing) var(--ifm-global-spacing);
+  background-color: var(--ifm-color-emphasis-100);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-weight: var(--ifm-font-weight-semibold);
+  color: var(--ifm-font-color-base);
+  transition: background-color 0.15s ease;
+}
+
+.expandableHeader:hover {
+  background-color: var(--ifm-color-emphasis-200);
+}
+
+.expandableHeader:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: -2px;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--ifm-h5-font-size);
+  line-height: 1.4;
+}
+
+.expandIcon {
+  transition: transform 0.2s ease-in-out;
+  display: inline-block;
+  font-size: 0.8em;
+  margin-left: var(--ifm-global-spacing-half);
+  flex-shrink: 0;
+}
+
+.expandIcon.rotated {
+  transform: rotate(180deg);
+}
+
+.expandableContent {
+  transition: height 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+.contentInner {
+  padding: var(--ifm-global-spacing);
+}
+
+/* Focus styles for accessibility */
+.expandableHeader:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Responsive styles */
+@media (max-width: 996px) {
+  .expandableHeader {
+    padding: var(--ifm-global-spacing-half) var(--ifm-global-spacing-half);
+  }
+
+  .contentInner {
+    padding: var(--ifm-global-spacing-half);
+  }
+
+  .sectionTitle {
+    font-size: var(--ifm-h6-font-size);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .expandableSection {
+    border: 2px solid CanvasText;
+  }
+
+  .expandableHeader {
+    background-color: Canvas;
+    color: CanvasText;
+  }
+
+  .expandableHeader:hover {
+    background-color: ActiveBorder;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .expandIcon {
+    transition: none;
+  }
+
+  .expandableContent {
+    transition: none;
+  }
+}

@@ -1,0 +1,103 @@
+/* Styles for LazyLoader component */
+
+.lazyLoader {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.lazyLoader.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fallback loader styles */
+.lazyLoaderFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
+  padding: var(--ifm-spacing);
+  background-color: var(--ifm-color-emphasis-100);
+  border: 1px dashed var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* Loading animation */
+.lazyLoaderFallback::after {
+  content: "";
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.5rem;
+  border: 2px solid var(--ifm-color-emphasis-300);
+  border-top-color: var(--ifm-color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Fade-in animation when content becomes visible */
+.lazyLoader[data-is-visible="true"] {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Performance consideration: disable animations for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .lazyLoader,
+  .lazyLoader.visible {
+    transition: none;
+  }
+
+  .lazyLoader[data-is-visible="true"] {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .lazyLoaderFallback::after {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .lazyLoaderFallback {
+    border: 2px solid CanvasText;
+    background-color: Canvas;
+    color: CanvasText;
+  }
+
+  .lazyLoaderFallback::after {
+    border: 2px solid CanvasText;
+    border-top-color: CanvasText;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .lazyLoaderFallback {
+    min-height: 80px;
+    padding: var(--ifm-spacing-half);
+    font-size: 0.75rem;
+  }
+}

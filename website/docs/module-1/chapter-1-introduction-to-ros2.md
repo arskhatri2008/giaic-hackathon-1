@@ -162,6 +162,90 @@ graph LR
 
 In this chapter, we introduced ROS 2 as the foundational nervous system for humanoid robots. We covered what ROS 2 is and why it exists, compared it to traditional software architectures, and explored middleware concepts like DDS, pub-sub, and real-time constraints.
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## Interactive Learning Elements
+
+### Knowledge Check: ROS 2 Fundamentals
+
+Let's test your understanding of the core concepts we've covered:
+
+<details>
+  <summary>What does DDS stand for in the context of ROS 2?</summary>
+  <p>Answer: Data Distribution Service. DDS stands for Data Distribution Service, which is the underlying communication middleware that ROS 2 uses to ensure reliable data exchange between robot components.</p>
+</details>
+
+### Expandable Reference: ROS 2 Architecture Components
+
+<details>
+  <summary>Detailed Architecture Components</summary>
+  <p>Here are the key components of the ROS 2 architecture:</p>
+  <ul>
+    <li><strong>Nodes</strong>: Individual processes that perform specific functions</li>
+    <li><strong>Topics</strong>: Enable asynchronous communication through publish/subscribe patterns</li>
+    <li><strong>Services</strong>: Provide synchronous request/response communication</li>
+    <li><strong>Actions</strong>: Support long-running tasks with feedback and goal management</li>
+    <li><strong>Parameters</strong>: Configuration values that can be changed at runtime</li>
+    <li><strong>Interfaces</strong>: Message and service definitions that enable communication</li>
+  </ul>
+</details>
+
+### Interactive Code Example
+
+```python title="Simple ROS 2 Node Example"
+import rclpy
+from rclpy.node import Node
+
+class MinimalPublisher(Node):
+
+    def __init__(self):
+        super().__init__('minimal_publisher')
+        self.publisher = self.create_publisher(String, 'topic', 10)
+        timer_period = 0.5  # seconds
+        self.timer = self.create_timer(timer_period, self.timer_callback)
+        self.i = 0
+
+    def timer_callback(self):
+        msg = String()
+        msg.data = 'Hello World: %d' % self.i
+        self.publisher.publish(msg)
+        self.get_logger().info('Publishing: "%s"' % msg.data)
+        self.i += 1
+```
+
+### Multi-Language Code Examples
+
+<Tabs groupId="lang-choice">
+  <TabItem value="python" label="Python">
+    ```python
+    import rclpy
+    from rclpy.node import Node
+
+    class MinimalPublisher(Node):
+        def __init__(self):
+            super().__init__('minimal_publisher')
+            self.publisher = self.create_publisher(String, 'topic', 10)
+    ```
+  </TabItem>
+  <TabItem value="cpp" label="C++">
+    ```cpp
+    #include <rclcpp/rclcpp.hpp>
+    #include <std_msgs/msg/string.hpp>
+
+    class MinimalPublisher : public rclcpp::Node
+    {
+    public:
+      MinimalPublisher()
+      : Node("minimal_publisher")
+      {
+        publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
+      }
+    };
+    ```
+  </TabItem>
+</Tabs>
+
 ## Next Steps
 
 In the next chapter, we'll dive into the communication primitives of ROS 2, exploring how nodes, topics, services, and actions work together to create complex robot behaviors.

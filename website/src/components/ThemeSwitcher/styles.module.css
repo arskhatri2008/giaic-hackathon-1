@@ -1,0 +1,86 @@
+/* Styles for ThemeSwitcher component */
+
+.themeSwitcher {
+  display: flex;
+  gap: var(--ifm-global-spacing-quarter);
+  align-items: center;
+  padding: var(--ifm-global-spacing-half);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-color-emphasis-100);
+}
+
+.themeButton {
+  display: flex;
+  align-items: center;
+  gap: var(--ifm-global-spacing-quarter);
+  padding: var(--ifm-global-spacing-quarter) var(--ifm-global-spacing-half);
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-emphasis-800);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 0.875rem;
+  font-weight: var(--ifm-font-weight-semibold);
+}
+
+.themeButton:hover {
+  background-color: var(--ifm-color-emphasis-200);
+  border-color: var(--ifm-color-emphasis-400);
+}
+
+.themeButton.active {
+  background-color: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: white;
+}
+
+.themeButton.active:hover {
+  background-color: var(--ifm-color-primary-dark);
+  border-color: var(--ifm-color-primary-dark);
+}
+
+.themeButton:focus {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+.themeIcon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.themeLabel {
+  display: none;
+}
+
+/* Show labels on larger screens */
+@media (min-width: 768px) {
+  .themeLabel {
+    display: inline;
+  }
+}
+
+/* Accessibility enhancements */
+@media (prefers-reduced-motion: reduce) {
+  .themeButton {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .themeSwitcher {
+    border: 2px solid CanvasText;
+  }
+
+  .themeButton {
+    border: 1px solid CanvasText;
+  }
+
+  .themeButton.active {
+    border: 2px solid CanvasText;
+    outline: 1px solid CanvasText;
+  }
+}

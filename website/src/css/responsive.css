@@ -1,0 +1,248 @@
+/* Responsive breakpoint system for interactive UI components */
+
+/* Breakpoint definitions */
+/* Mobile: Up to 768px width */
+:root {
+  --ifm-breakpoint-xs: 0;
+  --ifm-breakpoint-sm: 576px;
+  --ifm-breakpoint-md: 768px;
+  --ifm-breakpoint-lg: 996px;
+  --ifm-breakpoint-xl: 1200px;
+  --ifm-breakpoint-xxl: 1400px;
+}
+
+/* Mobile-first responsive utilities */
+.mobile-hidden {
+  display: block;
+}
+
+.tablet-hidden {
+  display: block;
+}
+
+.desktop-hidden {
+  display: block;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .mobile-hidden {
+    display: none;
+  }
+
+  .mobile-full-width {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .mobile-center {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .mobile-padding {
+    padding: 0.5rem;
+  }
+
+  .mobile-margin {
+    margin: 0.5rem;
+  }
+
+  /* Navigation adjustments for mobile */
+  .sidebar-collapsible {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .navbar-mobile-menu {
+    display: block;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--ifm-background-surface-color);
+    border-top: 1px solid var(--ifm-color-emphasis-300);
+    z-index: 1000;
+  }
+
+  .navbar-mobile-menu.hidden {
+    display: none;
+  }
+}
+
+/* Tablet styles (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tablet-hidden {
+    display: none;
+  }
+
+  .tablet-full-width {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .tablet-center {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .tablet-padding {
+    padding: 1rem;
+  }
+
+  .tablet-margin {
+    margin: 1rem;
+  }
+}
+
+/* Desktop styles (1025px and above) */
+@media (min-width: 1025px) {
+  .desktop-hidden {
+    display: none;
+  }
+
+  .desktop-full-width {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .desktop-center {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .desktop-padding {
+    padding: 1.5rem;
+  }
+
+  .desktop-margin {
+    margin: 1.5rem;
+  }
+}
+
+/* Responsive grid system */
+.responsive-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.responsive-grid-1-col {
+  grid-template-columns: 1fr;
+}
+
+.responsive-grid-2-col {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.responsive-grid-3-col {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+@media (min-width: 769px) {
+  .responsive-grid-2-col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .responsive-grid-3-col {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .responsive-grid-2-col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .responsive-grid-3-col {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .responsive-grid-4-col {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Flexible component containers */
+.component-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--ifm-spacing-horizontal);
+}
+
+@media (min-width: 769px) {
+  .component-container {
+    padding: 0 calc(var(--ifm-spacing-horizontal) * 2);
+  }
+}
+
+@media (min-width: 1025px) {
+  .component-container {
+    max-width: 1200px;
+    padding: 0;
+  }
+}
+
+/* Responsive typography */
+.responsive-text-small {
+  font-size: 0.875rem;
+}
+
+.responsive-text-medium {
+  font-size: 1rem;
+}
+
+.responsive-text-large {
+  font-size: 1.25rem;
+}
+
+@media (min-width: 769px) {
+  .responsive-text-small {
+    font-size: 0.875rem;
+  }
+
+  .responsive-text-medium {
+    font-size: 1rem;
+  }
+
+  .responsive-text-large {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1025px) {
+  .responsive-text-small {
+    font-size: 0.875rem;
+  }
+
+  .responsive-text-medium {
+    font-size: 1rem;
+  }
+
+  .responsive-text-large {
+    font-size: 1.25rem;
+  }
+}
+
+/* Utility classes for responsive spacing */
+.r-spacer-xs { margin: 0.25rem; }
+.r-spacer-sm { margin: 0.5rem; }
+.r-spacer-md { margin: 1rem; }
+.r-spacer-lg { margin: 1.5rem; }
+.r-spacer-xl { margin: 2rem; }
+
+@media (min-width: 769px) {
+  .r-spacer-xs { margin: 0.25rem; }
+  .r-spacer-sm { margin: 0.5rem; }
+  .r-spacer-md { margin: 1rem; }
+  .r-spacer-lg { margin: 1.5rem; }
+  .r-spacer-xl { margin: 2rem; }
+}
+
+@media (min-width: 1025px) {
+  .r-spacer-xs { margin: 0.5rem; }
+  .r-spacer-sm { margin: 1rem; }
+  .r-spacer-md { margin: 1.5rem; }
+  .r-spacer-lg { margin: 2rem; }
+  .r-spacer-xl { margin: 3rem; }
+}
