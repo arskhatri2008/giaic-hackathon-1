@@ -87,7 +87,7 @@ const config = {
         {name: 'og:type', content: 'website'},
         {name: 'og:title', content: 'Physical AI & Humanoid Robotics - Module 1: The Robotic Nervous System (ROS 2)'},
         {name: 'og:description', content: 'Learn ROS 2 fundamentals, communication primitives, and robot modeling with URDF for humanoid robotics and AI integration.'},
-        {name: 'og:url', content: 'https://your-username.github.io/physical-ai-robotics/'},
+        {name: 'og:url', content: 'https://github.com/arskhatri2008/giaic-hackathon-1/'},
         {name: 'twitter:card', content: 'summary_large_image'},
         {name: 'twitter:title', content: 'Physical AI & Humanoid Robotics - Module 1: The Robotic Nervous System (ROS 2)'},
         {name: 'twitter:description', content: 'Learn ROS 2 fundamentals, communication primitives, and robot modeling with URDF for humanoid robotics and AI integration.'},
