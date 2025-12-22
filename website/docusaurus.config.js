@@ -110,7 +110,7 @@ const config = {
           },
           {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/your-username/physical-ai-robotics',
+            href: 'https://github.com/arskhatri2008/giaic-hackathon-1',
             label: 'GitHub',
             position: 'right',
           },
