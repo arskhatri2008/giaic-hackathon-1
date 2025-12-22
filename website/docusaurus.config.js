@@ -134,7 +134,7 @@ const config = {
             type: "docSidebar",
             sidebarId: "tutorialSidebar",
             position: "left",
-            label: "Modules: ROS 2 & Digital Twin",
+            label: "Book",
           },
           { to: "/blog", label: "Blog", position: "left" },
           {

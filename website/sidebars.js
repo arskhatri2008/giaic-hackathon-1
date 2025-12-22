@@ -45,6 +45,16 @@ const sidebars = {
         'modules/ai-robot-brain/chapter-3-nav2-navigation'
       ],
     },
+    {
+      type: 'category',
+      label: 'Module 4: Vision-Language-Action (VLA) for Humanoid Robotics',
+      items: [
+        'module-4/intro',
+        'module-4/chapter-1-voice-to-action',
+        'module-4/chapter-2-cognitive-planning',
+        'module-4/chapter-3-autonomous-humanoid'
+      ],
+    },
   ],
 };
 
