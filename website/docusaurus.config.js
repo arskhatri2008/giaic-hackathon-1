@@ -158,7 +158,7 @@ const config = {
               },
               {
                 label: 'GitHub',
-                href: 'https://github.com/your-username/physical-ai-robotics',
+                href: 'https://github.com/arskhatri2008/giaic-hackathon-1',
               },
             ],
           },
