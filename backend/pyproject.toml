@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "docusaurus-rag-ingestion"
+version = "0.1.0"
+description = "RAG ingestion pipeline for Docusaurus book content"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "playwright>=1.40.0",
+    "cohere>=4.9.0",
+    "qdrant-client>=1.9.0",
+    "python-dotenv>=1.0.0",
+    "click>=8.1.7",
+    "tqdm>=4.66.1",
+    "structlog>=23.2.0"
+]
+
+[project.scripts]
+docusaurus-rag = "main:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
