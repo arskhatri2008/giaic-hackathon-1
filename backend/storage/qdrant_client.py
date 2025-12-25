@@ -125,9 +125,9 @@ class QdrantStorage:
                 "custom_metadata": content_chunk.metadata
             }
 
-            # Create point for Qdrant
+            # Create point for Qdrant - use the content chunk ID directly (should be UUID)
             point = models.PointStruct(
-                id=f"{content_chunk.id}_{i}",  # Create unique ID
+                id=content_chunk.id,  # Use content_chunk's UUID directly
                 vector=embedding_vector.vector,
                 payload=payload
             )
@@ -158,20 +158,23 @@ class QdrantStorage:
         Retrieve similar embeddings from Qdrant.
         """
         try:
-            results = self.client.search(
+            # Use the query_points method which is available in QdrantClient
+            results = self.client.query_points(
                 collection_name=self.collection_name,
-                query_vector=query_vector,
+                query=query_vector,
                 limit=limit
             )
 
             retrieved_items = []
-            for result in results:
+            for result in results.points:
                 item = {
                     "id": result.id,
                     "score": result.score,
                     "payload": result.payload,
-                    "vector": result.vector
                 }
+                # Add vector only if available in the result
+                if hasattr(result, 'vector') and result.vector is not None:
+                    item["vector"] = result.vector
                 retrieved_items.append(item)
 
             logger.info("Similarity search completed", result_count=len(retrieved_items))

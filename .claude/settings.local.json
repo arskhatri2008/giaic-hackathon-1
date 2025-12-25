@@ -15,7 +15,9 @@
       "Bash(curl -s -o /dev/null -w \"Module 1 intro: %{http_code}\\\\n\" http://localhost:3000/docs/module-1/intro)",
       "Bash(curl -s http://localhost:3000/docs/module-1/chapter-1-introduction-to-ros2)",
       "Bash(npm run build)",
-      "Bash(powershell -ExecutionPolicy Bypass -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks)"
+      "Bash(powershell -ExecutionPolicy Bypass -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks)",
+      "Bash(python -m main --urls \"https://giaic-hackathon-1-ten.vercel.app/\")",
+      "Bash(python -m main --urls \"https://giaic-hackathon-1-ten.vercel.app\")"
     ]
   }
 }

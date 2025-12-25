@@ -56,9 +56,13 @@ class DocusaurusCrawler(BaseCrawler):
         self.visited_urls.add(url)
         logger.info("Crawling page", url=url, depth=depth)
 
+        page = None
         try:
             page = await context.new_page()
-            await page.set_default_timeout(settings.crawler_timeout * 1000)
+            if page is None:
+                logger.error("Failed to create page object", url=url)
+                return
+            page.set_default_timeout(settings.crawler_timeout * 1000)  # Don't await this method
 
             # Navigate to the page
             await page.goto(url, wait_until="domcontentloaded")
@@ -80,32 +84,130 @@ class DocusaurusCrawler(BaseCrawler):
                     if link not in self.visited_urls:
                         await self._crawl_url(context, link, depth + 1, max_depth)
 
-            await page.close()
-
         except Exception as e:
             logger.error("Error crawling page", url=url, error=str(e))
+            import traceback
+            logger.error("Full traceback", url=url, traceback=traceback.format_exc())
             # Add error to crawl job tracking if needed
             pass
+        finally:
+            if page:
+                try:
+                    await page.close()
+                except:
+                    pass  # Ignore errors when closing page
 
     async def _extract_content(self, page, url: str) -> Optional[Dict]:
         """Extract content from a Docusaurus page using appropriate selectors."""
         try:
-            # Wait for content to load
-            await page.wait_for_selector('.markdown, .theme-doc-markdown', timeout=10000)
+            # Wait for content to load with broader selectors for Docusaurus sites
+            await page.wait_for_selector('main, .markdown, .theme-doc-markdown, article, .content, .hero__title, .hero__subtitle, .container, .main-wrapper, body', timeout=10000)
 
-            # Extract the main content
-            # Docusaurus typically uses .markdown or .theme-doc-markdown classes for content
-            content = await page.locator('.markdown, .theme-doc-markdown').first.inner_text()
+            # Extract the main content - use broader selectors to handle various Docusaurus structures
+            content_selectors = [
+                '.markdown',
+                '.theme-doc-markdown',
+                'main',
+                'article',
+                '.container',
+                '.heroBanner_qdFl',  # Specific to this site's banner
+                '.hero__title',      # Hero title
+                '.hero__subtitle',   # Hero subtitle
+                '.features_t9lD',    # Features section
+                '.main-wrapper',     # Main wrapper
+                '.theme-doc-content', # Common Docusaurus content class
+                '.markdown > div',   # Nested markdown content
+                '.content',
+                'body'
+            ]
+            content = ""
 
-            # Extract title
-            title = await page.locator('h1').first.inner_text()
+            for selector in content_selectors:
+                try:
+                    elements = page.locator(selector)
+                    count = await elements.count()
+                    if count > 0:
+                        element = elements.first
+                        if element:  # Check if element is not None
+                            element_text = await element.inner_text()
+                            if element_text and len(element_text.strip()) > 50:  # If we get meaningful content, break
+                                content = element_text
+                                break
+                except Exception as e:
+                    logger.debug(f"Error extracting content with selector {selector}", error=str(e))
+                    continue  # Try next selector if current one fails
+
+            # If still no substantial content, try alternative approaches
+            if not content or len(content.strip()) <= 50:
+                try:
+                    # Try to get all paragraphs and headings
+                    all_text_elements = page.locator('h1, h2, h3, h4, p, li, td, th')
+                    count = await all_text_elements.count()
+
+                    if count > 0:
+                        all_texts = []
+                        for i in range(min(count, 20)):  # Limit to first 20 elements to avoid huge content
+                            try:
+                                element = all_text_elements.nth(i)
+                                if element:
+                                    text = await element.inner_text()
+                                    if text and len(text.strip()) > 5:
+                                        all_texts.append(text.strip())
+                            except:
+                                continue
+
+                        content = ' '.join(all_texts)
+
+                except Exception as e:
+                    logger.debug("Alternative content extraction failed", error=str(e))
+
+            # Extract title - try multiple possible title selectors including Docusaurus-specific ones
+            title_selectors = [
+                '.hero__title',      # Docusaurus hero title
+                'h1.hero__title',    # More specific hero title
+                'h1',
+                'title',
+                'h2',
+                'h3',
+                '[data-rh="true"][property="og:title"]',  # Open Graph title
+                '.navbar__title',    # Navbar title
+                '.hero__subtitle'    # Use subtitle as title if no h1
+            ]
+            title = ""
+            for selector in title_selectors:
+                try:
+                    title_elements = page.locator(selector)
+                    count = await title_elements.count()
+                    if count > 0:
+                        title_element = title_elements.first
+                        if title_element:  # Check if element is not None
+                            title_text = await title_element.inner_text()
+                            if title_text and title_text.strip():
+                                title = title_text.strip()
+                                break
+                except Exception as e:
+                    logger.debug(f"Error extracting title with selector {selector}", error=str(e))
+                    continue
+
+            # If no title found, try to extract from URL or meta tag
+            if not title:
+                try:
+                    # Try to get title from meta tag
+                    title_elements = page.locator('title')
+                    count = await title_elements.count()
+                    if count > 0:
+                        title_element = title_elements.first
+                        if title_element:
+                            title = await title_element.inner_text()
+                except:
+                    pass
 
             # Extract section path from URL
             parsed_url = urlparse(url)
             path_parts = [part for part in parsed_url.path.split('/') if part]
             section_path = '/'.join(path_parts) or 'home'
 
-            if content and len(content.strip()) > 50:  # Minimum content length
+            if content and len(content.strip()) > 10:  # Minimum content length (reduced from 50 to 10)
                 return {
                     'url': url,
                     'title': title,
@@ -122,27 +224,31 @@ class DocusaurusCrawler(BaseCrawler):
         """Find internal links on the page that belong to the same domain."""
         try:
             # Get all links on the page
-            links = await page.locator('a[href]').all()
+            links_locator = page.locator('a[href]')
+            count = await links_locator.count()
             internal_links = []
 
-            for link in links:
+            for i in range(count):
                 try:
-                    href = await link.get_attribute('href')
-                    if href:
-                        # Resolve relative URLs
-                        full_url = urljoin(base_url, href)
+                    link = links_locator.nth(i)
+                    if link:  # Check if link element is not None
+                        href = await link.get_attribute('href')
+                        if href:
+                            # Resolve relative URLs
+                            full_url = urljoin(base_url, href)
 
-                        # Only include internal links to the same domain
-                        if self.is_valid_url(full_url, base_url):
-                            # Filter out non-content links (like navigation, social links, etc.)
-                            link_text = await link.inner_text()
-                            link_title = await link.get_attribute('title') or ''
+                            # Only include internal links to the same domain
+                            if self.is_valid_url(full_url, base_url):
+                                # Filter out non-content links (like navigation, social links, etc.)
+                                link_text = await link.inner_text()
+                                link_title = await link.get_attribute('title') or ''
 
-                            # Skip links that are clearly navigation or non-content
-                            if not any(skip in link_text.lower() for skip in ['home', 'blog', 'github', 'twitter', 'linkedin']) and \
-                               not any(skip in link_title.lower() for skip in ['home', 'blog', 'github', 'twitter', 'linkedin']):
-                                internal_links.append(full_url)
-                except Exception:
+                                # Skip links that are clearly navigation or non-content
+                                if not any(skip in link_text.lower() for skip in ['home', 'blog', 'github', 'twitter', 'linkedin']) and \
+                                   not any(skip in link_title.lower() for skip in ['home', 'blog', 'github', 'twitter', 'linkedin']):
+                                    internal_links.append(full_url)
+                except Exception as e:
+                    logger.debug(f"Error processing link {i}", error=str(e))
                     continue  # Skip problematic links
 
             # Remove duplicates while preserving order

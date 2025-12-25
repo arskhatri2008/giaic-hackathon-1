@@ -86,7 +86,7 @@ async def run_pipeline(urls: List[str], collection_name: str):
         texts = [chunk.content for chunk in content_chunks]
         logger.info("Starting embedding generation", text_count=len(texts))
 
-        embedding_vectors = cohere_client.create_embedding_vectors(texts)
+        embedding_vectors = cohere_client.create_embedding_vectors(texts, urls[0] if urls else "")
 
         logger.info("Embedding generation completed", vector_count=len(embedding_vectors))
         job.stats['generated_embeddings'] = len(embedding_vectors)

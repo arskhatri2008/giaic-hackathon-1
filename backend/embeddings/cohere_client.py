@@ -4,7 +4,7 @@ import structlog
 import time
 from config.settings import settings
 from models.data_models import EmbeddingVector
-from utils.helpers import normalize_text
+from utils.helpers import normalize_text, calculate_content_hash
 
 logger = structlog.get_logger()
 
@@ -104,7 +104,7 @@ class CohereClient:
 
         return all_embeddings
 
-    def create_embedding_vectors(self, texts: List[str]) -> List[EmbeddingVector]:
+    def create_embedding_vectors(self, texts: List[str], source_url: str = "") -> List[EmbeddingVector]:
         """
         Create EmbeddingVector objects from texts by generating embeddings.
         """
@@ -123,16 +123,17 @@ class CohereClient:
             # In a full implementation, we'd have proper ContentChunk objects
             from models.data_models import ContentChunk
             from datetime import datetime
+            from uuid import uuid4
 
             content_chunk = ContentChunk(
-                id=f"temp_chunk_{i}",
-                source_url="",
+                id=str(uuid4()),  # Use proper UUID
+                source_url=source_url,
                 section_path="",
                 title="",
                 content=text,
                 chunk_index=0,
                 total_chunks=1,
-                content_hash="",
+                content_hash=calculate_content_hash(text),  # Use proper hash function
                 extracted_at=datetime.now(),
                 word_count=len(text.split()),
                 metadata={}
