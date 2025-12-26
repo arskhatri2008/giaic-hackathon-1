@@ -17,7 +17,8 @@
       "Bash(npm run build)",
       "Bash(powershell -ExecutionPolicy Bypass -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks)",
       "Bash(python -m main --urls \"https://giaic-hackathon-1-ten.vercel.app/\")",
-      "Bash(python -m main --urls \"https://giaic-hackathon-1-ten.vercel.app\")"
+      "Bash(python -m main --urls \"https://giaic-hackathon-1-ten.vercel.app\")",
+      "Bash(python examples/final_validation_test.py)"
     ]
   }
 }
