@@ -578,5 +578,92 @@ async def main():
         print(f"  Embedding Consistency: {result.validation_report['metrics']['embedding_consistency']}")
 
 
+def retrieve_book_content(query: str, limit: int = 5, min_score: float = 0.7, max_retries: int = 3) -> List[Dict[str, Any]]:
+    """
+    Retrieve relevant book content based on the query.
+
+    This function provides a simple interface for the RAG agent to retrieve
+    content from the Qdrant database with retry logic.
+
+    Args:
+        query: The search query to find relevant book content
+        limit: Maximum number of results to return (default 5)
+        min_score: Minimum relevance score threshold (default 0.7)
+        max_retries: Maximum number of retry attempts (default 3)
+
+    Returns:
+        List of content chunks with text and metadata
+    """
+    import asyncio
+    import logging
+    import time
+
+    async def _async_retrieve_with_retry():
+        last_exception = None
+
+        for attempt in range(max_retries + 1):  # +1 to include the initial attempt
+            try:
+                validator = RetrievalValidator()
+                result = await validator.validate_retrieval(query, limit, min_score)
+
+                # Convert RetrievedContentChunk objects to dictionaries
+                chunks = []
+                for chunk in result.retrieved_chunks:
+                    chunk_dict = {
+                        "content_id": chunk.id,
+                        "text": chunk.content,
+                        "metadata": {
+                            "source_url": chunk.source_url,
+                            "title": chunk.title,
+                            "relevance_score": chunk.relevance_score,
+                            "word_count": chunk.word_count,
+                            "section_path": chunk.section_path,
+                            "extracted_at": chunk.extracted_at
+                        }
+                    }
+                    chunks.append(chunk_dict)
+
+                logging.info(f"Retrieved {len(chunks)} chunks in attempt {attempt + 1}")
+                return chunks
+
+            except Exception as e:
+                last_exception = e
+                logging.warning(f"Attempt {attempt + 1} failed: {str(e)}")
+
+                if attempt < max_retries:  # Don't sleep on the last attempt
+                    wait_time = 2 ** attempt  # Exponential backoff
+                    logging.info(f"Retrying in {wait_time} seconds...")
+                    time.sleep(wait_time)
+                else:
+                    logging.error(f"All {max_retries + 1} attempts failed. Last error: {str(e)}")
+
+        # If all retries failed, return empty list to prevent agent from crashing
+        logging.error("All retry attempts exhausted, returning empty results")
+        return []
+
+    # Run the async function synchronously, handling the case where there's already a running event loop
+    try:
+        # Check if there's already a running event loop
+        loop = asyncio.get_running_loop()
+        # If there's already a running loop, schedule the task in that loop
+        import concurrent.futures
+        import threading
+
+        # For nested event loop scenarios, run in a separate thread or use a different approach
+        # We'll use asyncio.run_coroutine_threadsafe to run in the existing loop
+        future = asyncio.run_coroutine_threadsafe(_async_retrieve_with_retry(), loop)
+        return future.result(timeout=60)  # Increased timeout to 60 seconds to handle longer operations
+
+    except RuntimeError:
+        # No running event loop, so we can create and run our own
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+
+        return loop.run_until_complete(_async_retrieve_with_retry())
+
+
 if __name__ == "__main__":
     asyncio.run(main())
