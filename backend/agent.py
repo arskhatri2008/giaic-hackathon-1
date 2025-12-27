@@ -89,6 +89,10 @@ sys.path.append(os.path.dirname(__file__))  # Add current directory to path
 from retrieve import retrieve_book_content
 
 
+# Global counter to track tool calls during a single query processing
+_tool_call_count = 0
+_TOOL_CALL_LIMIT = 3  # Maximum number of times the tool can be called per query
+
 @function_tool
 def retrieve_book_content_tool(query: str) -> List[Dict[str, Any]]:
     """
@@ -100,7 +104,14 @@ def retrieve_book_content_tool(query: str) -> List[Dict[str, Any]]:
     Returns:
         List of content chunks with text and metadata
     """
-    logger.info(f"Retrieving content for query: {query}")
+    global _tool_call_count
+    _tool_call_count += 1
+
+    if _tool_call_count > _TOOL_CALL_LIMIT:
+        logger.warning(f"Tool call limit reached ({_TOOL_CALL_LIMIT}), returning empty results")
+        return []
+
+    logger.info(f"Retrieving content for query: {query} (call #{_tool_call_count})")
     try:
         # Lower the minimum score threshold to allow more content to be retrieved
         results = retrieve_book_content(query, min_score=0.3)  # Lowered from default 0.7
@@ -111,13 +122,18 @@ def retrieve_book_content_tool(query: str) -> List[Dict[str, Any]]:
         logger.error(f"Error retrieving content for query '{query}': {str(e)}")
         return []
 
+def reset_tool_call_counter():
+    """Reset the tool call counter for a new query"""
+    global _tool_call_count
+    _tool_call_count = 0
+
 
 # Initialize the RAG agent with enhanced instructions for response generation, source citation, and handling insufficient content
 rag_agent = Agent(
     name="RAG Book Assistant",
     instructions="""
     You are a helpful assistant that answers questions about book content.
-    Always use the retrieve_book_content_tool to find relevant information before answering.
+    Use the retrieve_book_content_tool to find relevant information before answering, but limit tool usage to maximum 2 calls per query.
     Your responses must be grounded in the retrieved content and you should cite the sources.
     Structure your response as follows:
     1. Provide the answer based on the retrieved content
@@ -127,6 +143,7 @@ rag_agent = Agent(
     5. When citing sources, mention the title, source URL, and any relevant section information
     6. If the retrieved content is insufficient to answer the question, explicitly mention this limitation
     7. Do not fabricate or hallucinate information not present in the retrieved content
+    8. After 2 tool calls maximum, provide your best answer based on available information
     """,
     model=third_party_model,
     tools=[retrieve_book_content_tool]
@@ -148,11 +165,18 @@ async def ask_question(question: str) -> str:
     """
     start_time = time.time()
     logger.info(f"Processing question: {question}")
+
+    # Reset the tool call counter for this new query
+    reset_tool_call_counter()
+
     try:
         result = await Runner.run(rag_agent, question)
         end_time = time.time()
         processing_time = end_time - start_time
         logger.info(f"Successfully processed question in {processing_time:.2f}s: {question[:50]}...")
+
+        # Reset the tool call counter after processing
+        reset_tool_call_counter()
 
         # Return the response as a string
         response = result.final_output
@@ -161,6 +185,8 @@ async def ask_question(question: str) -> str:
         end_time = time.time()
         processing_time = end_time - start_time
         logger.error(f"Error processing question '{question}' after {processing_time:.2f}s: {str(e)}")
+        # Reset the tool call counter even in case of error
+        reset_tool_call_counter()
         # Return a default response in case of error
         return "I'm sorry, I encountered an error processing your question."
 
