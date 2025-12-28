@@ -7,7 +7,7 @@ load_dotenv()
 
 
 class Settings:
-    """Configuration settings for the Docusaurus RAG pipeline."""
+    """Configuration settings for the Docusaurus RAG pipeline and FastAPI service."""
 
     def __init__(self):
         # Cohere Configuration
@@ -35,6 +35,30 @@ class Settings:
         # Processing Settings
         self.chunk_size_tokens: int = int(os.getenv("CHUNK_SIZE_TOKENS", "512"))
         self.chunk_overlap_tokens: int = int(os.getenv("CHUNK_OVERLAP_TOKENS", "50"))
+
+        # API Configuration
+        self.api_title: str = os.getenv("API_TITLE", "RAG Agent API")
+        self.api_description: str = os.getenv("API_DESCRIPTION", "API for interacting with the RAG (Retrieval-Augmented Generation) agent")
+        self.api_version: str = os.getenv("API_VERSION", "1.0.0")
+        self.api_host: str = os.getenv("API_HOST", "0.0.0.0")
+        self.api_port: int = int(os.getenv("API_PORT", "8000"))
+
+        # CORS Configuration
+        self.cors_origins: str = os.getenv("CORS_ORIGINS", "*")  # In production, replace with specific origins
+        self.cors_allow_credentials: bool = os.getenv("CORS_ALLOW_CREDENTIALS", "True").lower() == "true"
+        self.cors_allow_methods: str = os.getenv("CORS_ALLOW_METHODS", "*")
+        self.cors_allow_headers: str = os.getenv("CORS_ALLOW_HEADERS", "*")
+
+        # Agent Configuration
+        self.agent_timeout: int = int(os.getenv("AGENT_TIMEOUT", "30"))  # seconds
+        self.max_concurrent_requests: int = int(os.getenv("MAX_CONCURRENT_REQUESTS", "10"))
+
+        # Logging Configuration
+        self.log_level: str = os.getenv("LOG_LEVEL", "INFO")
+        self.log_format: str = os.getenv("LOG_FORMAT", "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+
+        # OpenRouter Configuration
+        self.openrouter_api_key: Optional[str] = os.getenv("OPENROUTER_API_KEY")
 
     def validate(self) -> bool:
         """Validate that all required settings are properly configured."""
