@@ -1,0 +1,46 @@
+{
+  "timestamp": "2025-12-26T00:12:53.746568",
+  "overall_success": false,
+  "tests": [
+    {
+      "test": "Configuration Verification",
+      "passed": true,
+      "details": "Configuration verification completed successfully"
+    },
+    {
+      "test": "Basic Retrieval Functionality",
+      "passed": true,
+      "details": "Retrieved 0 chunks with execution time 1.66s"
+    },
+    {
+      "test": "Semantic Similarity Search",
+      "passed": false,
+      "details": "Retrieved 0 relevant chunks with scores []"
+    },
+    {
+      "test": "Metadata Validation",
+      "passed": true,
+      "details": "Metadata completeness: Complete"
+    },
+    {
+      "test": "Embedding Consistency Validation",
+      "passed": true,
+      "details": "Consistency check: Passed - Embedding parameters are consistent"
+    },
+    {
+      "test": "Semantic Similarity Validation Test",
+      "passed": false,
+      "details": "Semantic similarity validation failed"
+    },
+    {
+      "test": "Error Handling Validation",
+      "passed": true,
+      "details": "Error handling methods present: Yes"
+    },
+    {
+      "test": "Deterministic Results Validation",
+      "passed": true,
+      "details": "Results consistent: Yes"
+    }
+  ]
+}

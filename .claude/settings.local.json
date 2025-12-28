@@ -14,7 +14,11 @@
       "Bash(powershell -Command \"Get-Content ''C:\\\\Users\\\\KHATRI\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\D--GI--AI-Meta-Web3--Q4-Claude-hackathon\\\\tasks\\\\bb76c57.output''\")",
       "Bash(curl -s -o /dev/null -w \"Module 1 intro: %{http_code}\\\\n\" http://localhost:3000/docs/module-1/intro)",
       "Bash(curl -s http://localhost:3000/docs/module-1/chapter-1-introduction-to-ros2)",
-      "Bash(npm run build)"
+      "Bash(npm run build)",
+      "Bash(powershell -ExecutionPolicy Bypass -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks)",
+      "Bash(python -m main --urls \"https://giaic-hackathon-1-ten.vercel.app/\")",
+      "Bash(python -m main --urls \"https://giaic-hackathon-1-ten.vercel.app\")",
+      "Bash(python examples/final_validation_test.py)"
     ]
   }
 }

@@ -1,0 +1,123 @@
+# API Contract: RAG Retrieval Validation
+# This contract defines the expected interface for the retrieval system
+
+openapi: 3.0.0
+info:
+  title: RAG Retrieval Validation API
+  version: 1.0.0
+  description: API contract for validating RAG retrieval functionality
+
+paths:
+  /validate-retrieval:
+    post:
+      summary: Validate retrieval functionality with a semantic query
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: The semantic query text to validate
+                  example: "What is ROS 2?"
+                limit:
+                  type: integer
+                  description: Maximum number of results to return
+                  default: 5
+                  example: 5
+                min_score:
+                  type: number
+                  format: float
+                  description: Minimum relevance score threshold
+                  default: 0.7
+                  example: 0.7
+      responses:
+        '200':
+          description: Validation successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query:
+                    type: string
+                    description: The original query text
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: Unique identifier for the chunk
+                        source_url:
+                          type: string
+                          description: Original URL of the content
+                        title:
+                          type: string
+                          description: Title of the content chunk
+                        content:
+                          type: string
+                          description: The content text (truncated)
+                        relevance_score:
+                          type: number
+                          format: float
+                          description: Semantic similarity score
+                        metadata:
+                          type: object
+                          description: Additional metadata about the content
+                  validation_report:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                        description: Whether validation passed
+                      message:
+                        type: string
+                        description: Validation result message
+                      metrics:
+                        type: object
+                        properties:
+                          execution_time:
+                            type: number
+                            format: float
+                            description: Time taken in seconds
+                          total_chunks:
+                            type: integer
+                            description: Total number of chunks retrieved
+                          metadata_complete:
+                            type: boolean
+                            description: Whether all metadata was present
+        '400':
+          description: Bad request - invalid query parameters
+        '500':
+          description: Server error - likely connection issues to Qdrant or Cohere
+
+  /validate-consistency:
+    get:
+      summary: Validate embedding consistency between ingestion and retrieval
+      responses:
+        '200':
+          description: Consistency validation result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  consistency_check:
+                    type: boolean
+                    description: Whether embeddings are consistent
+                  ingestion_model:
+                    type: string
+                    description: Model used for ingestion embeddings
+                  retrieval_model:
+                    type: string
+                    description: Model used for retrieval embeddings
+                  parameters_match:
+                    type: boolean
+                    description: Whether parameters match between systems
+                  validation_message:
+                    type: string
+                    description: Additional validation details
