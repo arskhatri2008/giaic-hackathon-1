@@ -1,0 +1,26 @@
+{
+  "name": "physical-ai-robotics",
+  "version": "1.0.0",
+  "description": "Physical AI & Humanoid Robotics - Module 1: The Robotic Nervous System (ROS 2)",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "dev:backend": "cd backend && python -c \"from api import app; import uvicorn; uvicorn.run(app, host='0.0.0.0', port=8000)\"",
+    "dev:frontend": "cd website && npm run start",
+    "backend": "cd backend && python -c \"from api import app; import uvicorn; uvicorn.run(app, host='0.0.0.0', port=8000)\"",
+    "frontend": "cd website && npm run start",
+    "build": "cd website && npm run build",
+    "serve": "cd website && npm run serve",
+    "install:all": "cd website && npm install && cd ../backend && pip install -r requirements-basic.txt"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "ros2",
+    "robotics",
+    "ai",
+    "docusaurus"
+  ],
+  "author": "Physical AI & Humanoid Robotics Course",
+  "license": "MIT"
+}

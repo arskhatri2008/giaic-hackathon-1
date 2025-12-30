@@ -118,3 +118,152 @@
   font-size: 0.7rem;
   margin-left: 4px;
 }
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  .chatbot-container {
+    height: 60vh; /* Use viewport height instead of fixed height */
+    max-width: 100%;
+    margin: 0 10px; /* Add side margins */
+    border-radius: 0; /* Remove border radius for full width on mobile */
+    border-left: none;
+    border-right: none;
+  }
+
+  .chatbot-header {
+    padding: 12px 16px; /* Consistent padding */
+  }
+
+  .chatbot-header h3 {
+    font-size: 1rem; /* Smaller font on mobile */
+    margin: 0; /* Remove any extra margin */
+  }
+
+  .chatbot-messages {
+    padding: 12px; /* Reduce padding */
+    gap: 8px; /* Smaller gap between messages */
+  }
+
+  .chatbot-input {
+    padding: 12px 16px; /* Consistent padding */
+  }
+
+  .message {
+    max-width: 90%; /* Increase max width on mobile */
+    padding: 10px 14px; /* Reduce padding */
+    font-size: 0.9rem; /* Slightly smaller font */
+    border-radius: 16px; /* Adjust border radius for mobile */
+  }
+
+  .sources h4 {
+    font-size: 0.75rem; /* Smaller font */
+  }
+
+  .sources ul {
+    font-size: 0.65rem; /* Smaller font */
+    padding-left: 12px; /* Reduce padding */
+  }
+
+  .message-content p {
+    font-size: 0.9rem; /* Slightly smaller font */
+    margin: 0; /* Remove any extra margins */
+  }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media (max-width: 600px) {
+  .chatbot-container {
+    height: 70vh; /* Use more viewport height on very small screens */
+    margin: 0 5px; /* Smaller margins */
+    border: none; /* Remove border for full width */
+  }
+
+  .chatbot-header {
+    padding: 10px 12px; /* Smaller padding */
+  }
+
+  .chatbot-header h3 {
+    font-size: 0.9rem; /* Even smaller font */
+    margin: 0; /* Remove any extra margin */
+  }
+
+  .chatbot-messages {
+    padding: 8px; /* Even smaller padding */
+  }
+
+  .chatbot-input {
+    padding: 10px 12px; /* Smaller padding */
+  }
+
+  .message {
+    max-width: 95%; /* Almost full width */
+    padding: 8px 12px; /* Smaller padding */
+    font-size: 0.85rem; /* Smaller font */
+    border-radius: 14px; /* Adjust border radius */
+  }
+
+  .message-container {
+    margin-bottom: 6px; /* Smaller margin */
+  }
+
+  .sources ul {
+    font-size: 0.6rem; /* Even smaller font */
+    padding-left: 8px; /* Even smaller padding */
+  }
+
+  .sources h4 {
+    font-size: 0.7rem; /* Even smaller font */
+  }
+
+  .sources li {
+    margin-bottom: 2px; /* Smaller margin */
+  }
+
+  .message-content p {
+    font-size: 0.85rem; /* Smaller font */
+  }
+}
+
+/* Very small devices (phones, 400px and down) */
+@media (max-width: 400px) {
+  .chatbot-container {
+    margin: 0 2px; /* Minimal margins */
+    height: 75vh; /* Use more viewport height */
+  }
+
+  .chatbot-header {
+    padding: 8px 10px; /* Minimal padding */
+  }
+
+  .chatbot-header h3 {
+    font-size: 0.85rem; /* Smaller font */
+  }
+
+  .chatbot-messages {
+    padding: 6px; /* Minimal padding */
+  }
+
+  .chatbot-input {
+    padding: 8px 10px; /* Minimal padding */
+  }
+
+  .message {
+    max-width: 98%; /* Almost full width */
+    padding: 6px 10px; /* Minimal padding */
+    font-size: 0.8rem; /* Smaller font */
+    border-radius: 12px; /* Adjust border radius */
+  }
+
+  .message-content p {
+    font-size: 0.8rem; /* Smaller font */
+  }
+
+  .sources h4 {
+    font-size: 0.65rem; /* Smaller font */
+  }
+
+  .sources ul {
+    font-size: 0.55rem; /* Smaller font */
+    padding-left: 6px; /* Minimal padding */
+  }
+}

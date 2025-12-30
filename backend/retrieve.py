@@ -578,6 +578,9 @@ async def main():
         print(f"  Embedding Consistency: {result.validation_report['metrics']['embedding_consistency']}")
 
 
+# Global cache for clients to avoid multiple Qdrant instances
+_client_cache = {}
+
 def retrieve_book_content(query: str, limit: int = 5, min_score: float = 0.7, max_retries: int = 3) -> List[Dict[str, Any]]:
     """
     Retrieve relevant book content based on the query.
@@ -594,75 +597,80 @@ def retrieve_book_content(query: str, limit: int = 5, min_score: float = 0.7, ma
     Returns:
         List of content chunks with text and metadata
     """
-    import asyncio
     import logging
-    import time
+    from storage.qdrant_client import QdrantStorage
+    from embeddings.cohere_client import CohereClient
+    from config.settings import settings
 
-    async def _async_retrieve_with_retry():
-        last_exception = None
+    for attempt in range(max_retries + 1):
+        try:
+            # Use cached clients if available, otherwise create new ones
+            cache_key = "default"
 
-        for attempt in range(max_retries + 1):  # +1 to include the initial attempt
-            try:
-                validator = RetrievalValidator()
-                result = await validator.validate_retrieval(query, limit, min_score)
+            if cache_key not in _client_cache:
+                # Initialize the required clients and store them in cache
+                cohere_client = CohereClient()
+                qdrant_storage = QdrantStorage()
 
-                # Convert RetrievedContentChunk objects to dictionaries
-                chunks = []
-                for chunk in result.retrieved_chunks:
+                _client_cache[cache_key] = {
+                    'cohere_client': cohere_client,
+                    'qdrant_storage': qdrant_storage
+                }
+            else:
+                # Use cached clients
+                cached = _client_cache[cache_key]
+                cohere_client = cached['cohere_client']
+                qdrant_storage = cached['qdrant_storage']
+
+            # Create embedding for the query
+            query_embedding = cohere_client.create_embedding_vectors([query], query)[0].vector
+
+            # Query Qdrant directly
+            results = qdrant_storage.retrieve_similar(query_embedding, limit)
+
+            # Convert results to the expected format
+            chunks = []
+            for result in results:
+                payload = result.get('payload', {})
+
+                # Filter by minimum score if needed
+                if result['score'] >= min_score:
                     chunk_dict = {
-                        "content_id": chunk.id,
-                        "text": chunk.content,
+                        "content_id": result['id'],
+                        "text": payload.get('content_preview', '') or payload.get('content', '') or payload.get('content_chunk', '') or '',
                         "metadata": {
-                            "source_url": chunk.source_url,
-                            "title": chunk.title,
-                            "relevance_score": chunk.relevance_score,
-                            "word_count": chunk.word_count,
-                            "section_path": chunk.section_path,
-                            "extracted_at": chunk.extracted_at
+                            "source_url": payload.get('source_url', ''),
+                            "title": payload.get('title', ''),
+                            "relevance_score": result['score'],
+                            "word_count": payload.get('word_count', 0),
+                            "section_path": payload.get('section_path', ''),
+                            "extracted_at": payload.get('extracted_at', ''),
+                            "content_hash": payload.get('content_hash', ''),
+                            "chunk_index": payload.get('chunk_index', 0),
+                            "total_chunks": payload.get('total_chunks', 0),
+                            "custom_metadata": payload.get('custom_metadata', {})
                         }
                     }
                     chunks.append(chunk_dict)
 
-                logging.info(f"Retrieved {len(chunks)} chunks in attempt {attempt + 1}")
-                return chunks
+            logging.info(f"Direct retrieval completed, found {len(chunks)} chunks with score >= {min_score}")
+            return chunks
 
-            except Exception as e:
-                last_exception = e
-                logging.warning(f"Attempt {attempt + 1} failed: {str(e)}")
+        except Exception as e:
+            logging.error(f"Attempt {attempt + 1} failed: {str(e)}")
+            if attempt == max_retries:  # Last attempt
+                logging.error("All retry attempts exhausted, returning empty results")
+                import traceback
+                traceback.print_exc()
+                return []
+            else:
+                import time
+                wait_time = 2 ** attempt  # Exponential backoff
+                logging.info(f"Retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
 
-                if attempt < max_retries:  # Don't sleep on the last attempt
-                    wait_time = 2 ** attempt  # Exponential backoff
-                    logging.info(f"Retrying in {wait_time} seconds...")
-                    time.sleep(wait_time)
-                else:
-                    logging.error(f"All {max_retries + 1} attempts failed. Last error: {str(e)}")
-
-        # If all retries failed, return empty list to prevent agent from crashing
-        logging.error("All retry attempts exhausted, returning empty results")
-        return []
-
-    # Run the async function synchronously, handling the case where there's already a running event loop
-    try:
-        # Check if there's already a running event loop
-        loop = asyncio.get_running_loop()
-        # If there's already a running loop, schedule the task in that loop
-        import concurrent.futures
-        import threading
-
-        # For nested event loop scenarios, run in a separate thread or use a different approach
-        # We'll use asyncio.run_coroutine_threadsafe to run in the existing loop
-        future = asyncio.run_coroutine_threadsafe(_async_retrieve_with_retry(), loop)
-        return future.result(timeout=60)  # Increased timeout to 60 seconds to handle longer operations
-
-    except RuntimeError:
-        # No running event loop, so we can create and run our own
-        try:
-            loop = asyncio.get_event_loop()
-        except RuntimeError:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-
-        return loop.run_until_complete(_async_retrieve_with_retry())
+    # This should never be reached due to the return in the loop, but included for safety
+    return []
 
 
 if __name__ == "__main__":

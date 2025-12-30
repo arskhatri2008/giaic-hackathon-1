@@ -162,6 +162,14 @@ const config = {
                 label: "Module 2: Digital Twin",
                 to: "/docs/modules/digital-twin-simulation/intro",
               },
+              {
+                label: "Module 3: AI Robot Brain",
+                to: "/docs/modules/ai-robot-brain/chapter-1-isaac-sim",
+              },
+              {
+                label: "Module 4: Voice to Action",
+                to: "/docs/module-4/intro",
+              },
             ],
           },
           {

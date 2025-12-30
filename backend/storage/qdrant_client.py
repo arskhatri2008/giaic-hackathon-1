@@ -15,18 +15,33 @@ class QdrantStorage:
         # Initialize Qdrant client based on configuration
         if settings.qdrant_url.startswith('http'):
             # Use HTTP connection
-            self.client = QdrantClient(
-                url=settings.qdrant_url,
-                api_key=settings.qdrant_api_key,
-                port=settings.qdrant_port
-            )
+            if settings.qdrant_api_key:
+                self.client = QdrantClient(
+                    url=settings.qdrant_url,
+                    api_key=settings.qdrant_api_key,
+                    port=settings.qdrant_port
+                )
+            else:
+                self.client = QdrantClient(
+                    url=settings.qdrant_url,
+                    port=settings.qdrant_port
+                )
+        elif settings.qdrant_url.startswith('.') or settings.qdrant_url.startswith('/'):
+            # Use local storage mode
+            self.client = QdrantClient(path=settings.qdrant_url)
         else:
-            # Use local connection
-            self.client = QdrantClient(
-                host=settings.qdrant_url,
-                port=settings.qdrant_port,
-                api_key=settings.qdrant_api_key
-            )
+            # Use local connection via host/port
+            if settings.qdrant_api_key:
+                self.client = QdrantClient(
+                    host=settings.qdrant_url,
+                    port=settings.qdrant_port,
+                    api_key=settings.qdrant_api_key
+                )
+            else:
+                self.client = QdrantClient(
+                    host=settings.qdrant_url,
+                    port=settings.qdrant_port
+                )
 
         self.collection_name = settings.qdrant_collection_name
 

@@ -54,6 +54,30 @@ const LayoutWrapper = (props) => {
 
         // Add button to DOM
         document.body.appendChild(toggleButton);
+
+        // Add responsive styles via CSS rules
+        const style = document.createElement('style');
+        style.textContent = `
+          @media (max-width: 768px) {
+            #chatbot-toggle-btn {
+              bottom: 15px !important;
+              right: 15px !important;
+              width: 50px !important;
+              height: 50px !important;
+              font-size: 20px !important;
+            }
+          }
+          @media (max-width: 480px) {
+            #chatbot-toggle-btn {
+              bottom: 10px !important;
+              right: 10px !important;
+              width: 45px !important;
+              height: 45px !important;
+              font-size: 18px !important;
+            }
+          }
+        `;
+        document.head.appendChild(style);
       }
 
       // Cleanup function to remove elements when component unmounts
@@ -62,6 +86,13 @@ const LayoutWrapper = (props) => {
         if (existingButton && existingButton.parentNode) {
           existingButton.parentNode.removeChild(existingButton);
         }
+        // Remove the added styles
+        const styles = document.querySelectorAll('style');
+        styles.forEach(s => {
+          if (s.textContent && s.textContent.includes('#chatbot-toggle-btn')) {
+            s.remove();
+          }
+        });
       };
     }
   }, [isClient]);
@@ -76,8 +107,8 @@ const LayoutWrapper = (props) => {
               position: 'fixed',
               bottom: '90px',
               right: '20px',
-              width: '400px',
-              height: '500px',
+              width: 'min(90%, 400px)', // Responsive width - up to 90% of screen or max 400px
+              height: 'min(60vh, 500px)', // Responsive height - up to 60% of viewport or max 500px
               zIndex: '1000',
               boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
               borderRadius: '12px',

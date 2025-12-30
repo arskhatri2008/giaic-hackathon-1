@@ -12,18 +12,42 @@ sys.path.insert(0, './backend')
 def run_pipeline():
     """Run the RAG ingestion pipeline"""
     from main import main
+    import requests
+    from xml.etree import ElementTree as ET
 
-    # Get the URL from environment or use default
-    url = os.getenv("DEPLOY_VERCEL_URL", "https://giaic-hackathon-1-ten.vercel.app")
+    # Get the sitemap URL from environment or use default
+    sitemap_url = os.getenv("DEPLOY_VERCEL_URL", "https://giaic-hackathon-1-ten.vercel.app/sitemap.xml")
 
-    print(f"Running backend pipeline with URL: {url}")
+    print(f"Fetching sitemap from: {sitemap_url}")
 
-    # Run the main function with the URL
-    # Simulate command line arguments
-    sys.argv = ["run_backend.py", "--urls", url]
+    # Fetch and parse the sitemap to get all URLs
+    try:
+        response = requests.get(sitemap_url)
+        response.raise_for_status()
 
-    # Call main function directly with the URL
-    main.callback(urls=[url], collection_name='docusaurus_embeddings', chunk_size=512, max_concurrent=5)
+        # Parse the XML sitemap
+        root = ET.fromstring(response.content)
+
+        # Extract all URLs from the sitemap
+        urls = []
+        for url_elem in root.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}url/{http://www.sitemaps.org/schemas/sitemap/0.9}loc'):
+            urls.append(url_elem.text)
+
+        print(f"Found {len(urls)} URLs in sitemap")
+
+        # Filter out non-documentation URLs if needed
+        doc_urls = [url for url in urls if '/docs/' in url or url.endswith('/')]
+        print(f"Filtered to {len(doc_urls)} documentation URLs")
+
+    except Exception as e:
+        print(f"Error fetching sitemap: {e}")
+        # Fallback to a single URL if sitemap fetching fails
+        doc_urls = [sitemap_url.replace('/sitemap.xml', '')]
+
+    print(f"Running backend pipeline with {len(doc_urls)} URLs")
+
+    # Run the main function with all URLs from the sitemap
+    main.callback(urls=doc_urls, collection_name='docusaurus_embeddings', chunk_size=512, max_concurrent=5)
 
 def run_agent_server():
     """Run the RAG agent server"""
@@ -32,7 +56,7 @@ def run_agent_server():
     from http.server import HTTPServer, BaseHTTPRequestHandler
     from urllib.parse import urlparse, parse_qs
 
-    from agent import ask_question, rag_agent
+    from agent import ask_question
 
     class RAGRequestHandler(BaseHTTPRequestHandler):
         def _set_headers(self, status_code=200):
@@ -47,45 +71,85 @@ def run_agent_server():
             self._set_headers(200)
 
         def do_POST(self):
-            if self.path == '/ask':
-                content_length = int(self.headers['Content-Length'])
-                post_data = self.rfile.read(content_length)
-
+            if self.path == '/ask' or self.path == '/api/query':
                 try:
+                    content_length = int(self.headers['Content-Length'])
+                    post_data = self.rfile.read(content_length)
+
                     request_data = json.loads(post_data.decode('utf-8'))
+
+                    # Handle both 'question' (for /ask) and 'query' (for /api/query) formats
                     question = request_data.get('question', '')
+                    if not question:
+                        question = request_data.get('query', '')
 
                     if not question:
                         self._set_headers(400)
-                        response = {'error': 'Question is required'}
+                        response = {'error': 'Question or query is required'}
                         self.wfile.write(json.dumps(response).encode('utf-8'))
                         return
 
                     # Run the agent asynchronously
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-                    response = loop.run_until_complete(ask_question(question))
+                    # Use a timeout mechanism that works on Windows
+                    import threading
+                    import time
+
+                    result = [None]
+                    exception = [None]
+
+                    def run_agent():
+                        try:
+                            loop = asyncio.new_event_loop()
+                            asyncio.set_event_loop(loop)
+                            result[0] = loop.run_until_complete(ask_question(question))
+                        except Exception as e:
+                            exception[0] = e
+
+                    thread = threading.Thread(target=run_agent)
+                    thread.daemon = True
+                    thread.start()
+                    thread.join(timeout=30)  # 30 second timeout
+
+                    if thread.is_alive():
+                        # Thread is still running after timeout
+                        self._set_headers(408)  # Request Timeout
+                        response = {'error': 'Request timeout - processing took too long'}
+                        self.wfile.write(json.dumps(response).encode('utf-8'))
+                        return
+
+                    if exception[0]:
+                        raise exception[0]
 
                     self._set_headers(200)
                     response_data = {
-                        'answer': response,
+                        'answer': result[0],
                         'status': 'success'
                     }
                     self.wfile.write(json.dumps(response_data).encode('utf-8'))
 
+                except ConnectionResetError:
+                    # Client disconnected before we could respond
+                    pass
                 except Exception as e:
-                    self._set_headers(500)
-                    response = {'error': str(e)}
-                    self.wfile.write(json.dumps(response).encode('utf-8'))
+                    try:
+                        self._set_headers(500)
+                        response = {'error': str(e)}
+                        self.wfile.write(json.dumps(response).encode('utf-8'))
+                    except:
+                        # If we can't even send an error response, just pass
+                        pass
             else:
-                self._set_headers(404)
-                response = {'error': 'Endpoint not found'}
-                self.wfile.write(json.dumps(response).encode('utf-8'))
+                try:
+                    self._set_headers(404)
+                    response = {'error': 'Endpoint not found'}
+                    self.wfile.write(json.dumps(response).encode('utf-8'))
+                except:
+                    pass
 
         def do_GET(self):
             if self.path == '/health':
                 self._set_headers(200)
-                response = {'status': 'healthy', 'agent_ready': rag_agent is not None}
+                response = {'status': 'healthy', 'agent_ready': True}
                 self.wfile.write(json.dumps(response).encode('utf-8'))
             else:
                 self._set_headers(404)
