@@ -39,12 +39,10 @@ Usage Examples:
 
 import asyncio
 from typing import List, Dict, Any
-from agents import Agent, Runner, function_tool
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
 import logging
-from agents import OpenAIChatCompletionsModel
 from openai import AsyncOpenAI
 
 
@@ -57,11 +55,6 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 client = AsyncOpenAI(
     api_key=OPENROUTER_API_KEY,
     base_url="https://openrouter.ai/api/v1"
-)
-
-third_party_model = OpenAIChatCompletionsModel(
-    openai_client=client,
-    model= "xiaomi/mimo-v2-flash:free"  # Back to free model
 )
 
 
@@ -93,7 +86,6 @@ from retrieve import retrieve_book_content
 _tool_call_count = 0
 _TOOL_CALL_LIMIT = 3  # Maximum number of times the tool can be called per query
 
-@function_tool
 def retrieve_book_content_tool(query: str) -> List[Dict[str, Any]]:
     """
     Retrieve relevant book content based on the query.
@@ -114,12 +106,14 @@ def retrieve_book_content_tool(query: str) -> List[Dict[str, Any]]:
     logger.info(f"Retrieving content for query: {query} (call #{_tool_call_count})")
     try:
         # Lower the minimum score threshold to allow more content to be retrieved
-        results = retrieve_book_content(query, min_score=0.3)  # Lowered from default 0.7
+        results = retrieve_book_content(query, limit=5, min_score=0.1)  # Lowered from default 0.7, increased limit
         logger.info(f"Retrieved {len(results)} content chunks for query: {query}")
         # Return the results directly as the tool output
         return results
     except Exception as e:
         logger.error(f"Error retrieving content for query '{query}': {str(e)}")
+        import traceback
+        traceback.print_exc()
         return []
 
 def reset_tool_call_counter():
@@ -128,27 +122,51 @@ def reset_tool_call_counter():
     _tool_call_count = 0
 
 
-# Initialize the RAG agent with enhanced instructions for response generation, source citation, and handling insufficient content
-rag_agent = Agent(
-    name="RAG Book Assistant",
-    instructions="""
-    You are a helpful assistant that answers questions about book content.
-    Use the retrieve_book_content_tool to find relevant information before answering, but limit tool usage to maximum 2 calls per query.
-    Your responses must be grounded in the retrieved content and you should cite the sources.
-    Structure your response as follows:
-    1. Provide the answer based on the retrieved content
-    2. Cite the specific content chunks that support your answer, including relevant metadata
-    3. If no relevant content is found, clearly state that you don't have enough information to answer
-    4. Ensure all claims are supported by the retrieved content
-    5. When citing sources, mention the title, source URL, and any relevant section information
-    6. If the retrieved content is insufficient to answer the question, explicitly mention this limitation
-    7. Do not fabricate or hallucinate information not present in the retrieved content
-    8. After 2 tool calls maximum, provide your best answer based on available information
-    """,
-    model=third_party_model,
-    tools=[retrieve_book_content_tool]
-    # Note: Removing output_type for now to avoid strict schema issues
-)
+# Simple RAG agent implementation using OpenAI API with function calling
+async def simple_rag_agent(question: str) -> str:
+    """
+    Simple RAG agent that retrieves content and sends it to OpenAI for response generation.
+    """
+    try:
+        # Retrieve relevant content
+        retrieved_content = retrieve_book_content_tool(question)
+
+        if not retrieved_content:
+            return "I couldn't find any relevant content to answer your question about that topic."
+
+        # Format the retrieved content for context
+        context_text = "Here is the relevant information I found:\n\n"
+        for i, chunk in enumerate(retrieved_content):
+            context_text += f"Source {i+1}:\n"
+            context_text += f"Title: {chunk.get('metadata', {}).get('title', 'No title')}\n"
+            context_text += f"URL: {chunk.get('metadata', {}).get('source_url', 'No URL')}\n"
+            context_text += f"Content: {chunk.get('text', '')}\n\n"
+
+        # Create the full prompt with context
+        messages = [
+            {
+                "role": "system",
+                "content": "You are a helpful assistant that answers questions based on the provided context. Only use information from the provided context to answer questions. If the context doesn't contain information to answer the question, say so clearly. Always cite the source when providing information."
+            },
+            {
+                "role": "user",
+                "content": f"Context:\n{context_text}\n\nQuestion: {question}\n\nPlease provide a detailed answer based on the context, citing the sources when possible."
+            }
+        ]
+
+        # Call the OpenAI API
+        response = await client.chat.completions.create(
+            model="xiaomi/mimo-v2-flash:free",
+            messages=messages,
+            temperature=0.7,
+            max_tokens=1000
+        )
+
+        return response.choices[0].message.content
+
+    except Exception as e:
+        logger.error(f"Error in simple RAG agent: {str(e)}")
+        return "I encountered an error processing your question. Please try again."
 
 
 import time
@@ -170,7 +188,8 @@ async def ask_question(question: str) -> str:
     reset_tool_call_counter()
 
     try:
-        result = await Runner.run(rag_agent, question)
+        # Use the simple RAG agent instead of the Runner
+        response = await simple_rag_agent(question)
         end_time = time.time()
         processing_time = end_time - start_time
         logger.info(f"Successfully processed question in {processing_time:.2f}s: {question[:50]}...")
@@ -178,8 +197,6 @@ async def ask_question(question: str) -> str:
         # Reset the tool call counter after processing
         reset_tool_call_counter()
 
-        # Return the response as a string
-        response = result.final_output
         return response
     except Exception as e:
         end_time = time.time()
@@ -312,33 +329,17 @@ async def health_check() -> dict:
     start_time = time.time()
 
     try:
-        # Test that the agent is properly initialized
-        if rag_agent is None:
-            end_time = time.time()
-            return {
-                "status": "error",
-                "message": "Agent not initialized",
-                "timestamp": __import__('datetime').datetime.now().isoformat(),
-                "response_time": end_time - start_time
-            }
+        # Test that the retrieval function works
+        # We'll test by trying to retrieve content with a simple query
+        from retrieve import retrieve_book_content
+        test_retrieval = retrieve_book_content("test", limit=1, min_score=0.0)
 
-        # Test that the agent has the required tools
-        if not hasattr(rag_agent, 'tools') or len(rag_agent.tools) == 0:
-            end_time = time.time()
-            return {
-                "status": "warning",
-                "message": "Agent has no tools configured",
-                "timestamp": __import__('datetime').datetime.now().isoformat(),
-                "response_time": end_time - start_time
-            }
-
-        # If we get here, the agent is properly set up
+        # If we get here, the basic functionality is working
         end_time = time.time()
         return {
             "status": "healthy",
             "message": "RAG agent is running properly",
-            "agent_name": rag_agent.name,
-            "tool_count": len(rag_agent.tools),
+            "retrieval_available": True,
             "timestamp": __import__('datetime').datetime.now().isoformat(),
             "response_time": end_time - start_time
         }
