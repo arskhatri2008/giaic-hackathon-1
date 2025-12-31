@@ -1,5 +1,7 @@
-// API base URL - using a fixed URL since Docusaurus doesn't expose environment variables to browser by default
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+// API base URL - using relative path for deployment compatibility
+// In development, this will connect to http://localhost:8000/api (if using proxy)
+// In deployment, this will connect to the same domain's /api endpoint
+const API_BASE_URL = '/api';
 
 /**
  * Query the RAG agent API
