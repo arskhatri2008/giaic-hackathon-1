@@ -80,6 +80,7 @@ const config = {
     ],
   ],
 
+
   plugins: [
     // Chatbot is implemented as a theme component in src/theme/Layout.js
   ],
