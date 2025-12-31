@@ -24,12 +24,26 @@ else:
     # Split comma-separated origins and strip whitespace
     cors_origins = [origin.strip() for origin in settings.cors_origins.split(",")]
 
+# Handle methods properly - split comma-separated values if not wildcard
+if settings.cors_allow_methods == "*":
+    allow_methods = ["*"]
+else:
+    # Split comma-separated methods and strip whitespace
+    allow_methods = [method.strip() for method in settings.cors_allow_methods.split(",")]
+
+# Handle headers properly - split comma-separated values if not wildcard
+if settings.cors_allow_headers == "*":
+    allow_headers = ["*"]
+else:
+    # Split comma-separated headers and strip whitespace
+    allow_headers = [header.strip() for header in settings.cors_allow_headers.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
     allow_credentials=settings.cors_allow_credentials,
-    allow_methods=[settings.cors_allow_methods] if settings.cors_allow_methods != "*" else ["*"],
-    allow_headers=[settings.cors_allow_headers] if settings.cors_allow_headers != "*" else ["*"],
+    allow_methods=allow_methods,
+    allow_headers=allow_headers,
 )
 
 # Import routers after app creation to avoid circular imports

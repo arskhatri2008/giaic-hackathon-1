@@ -1,7 +1,8 @@
-// API base URL - using relative path for deployment compatibility
-// In development, this will connect to http://localhost:8000/api (if using proxy)
+// API base URL - using absolute path for development, relative for deployment
+// In development, this connects to the backend server directly
 // In deployment, this will connect to the same domain's /api endpoint
-const API_BASE_URL = '/api';
+const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+const API_BASE_URL = isDev ? 'http://127.0.0.1:8000/api' : '/api';
 
 /**
  * Query the RAG agent API
