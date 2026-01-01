@@ -1,6 +1,6 @@
-// API base URL - using absolute path for development, relative for deployment
+// API base URL - using absolute path for development and relative for production
 // In development, this connects to the backend server directly
-// In deployment, this will connect to the same domain's /api endpoint
+// In production, this connects to the same domain's /api endpoint (proxied via Vercel API routes)
 const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost';
 const API_BASE_URL = isDev ? 'http://127.0.0.1:8000/api' : '/api';
 
