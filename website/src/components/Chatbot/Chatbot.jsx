@@ -40,7 +40,7 @@ const Chatbot = () => {
       // Add bot response
       const botMessage = {
         id: Date.now() + 1,
-        text: response.answer,
+        text: response.response,
         sender: 'bot',
         sources: response.sources || []
       };
