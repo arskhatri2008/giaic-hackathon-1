@@ -13,10 +13,17 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Check if BACKEND_URL is configured
+  const BACKEND_URL = process.env.BACKEND_URL;
+
+  if (!BACKEND_URL) {
+    return res.status(500).json({
+      error: 'BACKEND_URL environment variable is not configured',
+      message: 'Please set the BACKEND_URL environment variable in your Vercel deployment settings to point to your backend server.'
+    });
+  }
+
   try {
-    // Use the backend URL from environment variable, default to localhost for development
-    // For production deployment, this needs to be set to a publicly accessible backend URL
-    const BACKEND_URL = process.env.BACKEND_URL || 'http://127.0.0.1:8000';
     const backendUrl = `${BACKEND_URL}/api/health`;
 
     // Forward the request to the backend
@@ -34,7 +41,10 @@ export default async function handler(req, res) {
     res.status(response.status).json(data);
   } catch (error) {
     console.error('API proxy error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({
+      error: 'Failed to connect to backend server',
+      message: 'The backend server is not accessible. Please ensure your BACKEND_URL is correctly configured and the server is running.'
+    });
   }
 }
 
