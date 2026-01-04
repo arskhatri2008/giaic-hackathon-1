@@ -9,19 +9,9 @@
       }
     }
   ],
-  "rewrites": [
-    {
-      "source": "/api/query",
-      "destination": "/api/query"
-    },
-    {
-      "source": "/api/health",
-      "destination": "/api/health"
-    }
-  ],
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/(.*)",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",

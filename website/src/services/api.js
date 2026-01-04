@@ -1,8 +1,8 @@
-// API base URL - using absolute path for development and relative for production
-// In development, this connects to the backend server directly
-// In production, this connects to the same domain's /api endpoint (proxied via Vercel API routes)
+// API base URL - using different endpoints for development and production
+// In development, this connects to the local backend server
+// In production, this connects to the deployed Hugging Face Space backend
 const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost';
-const API_BASE_URL = isDev ? 'https://arskhatri-giaic-hackathon-1.hf.space' : '/api';
+const API_BASE_URL = isDev ? 'http://127.0.0.1:8000/api' : 'https://arskhatri-giaic-hackathon-1.hf.space';
 
 /**
  * Query the RAG agent API
